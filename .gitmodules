@@ -1,0 +1,3 @@
+[submodule "Hyrise"]
+	path = Hyrise
+	url = https://github.com/hyrise/hyrise.git
