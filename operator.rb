@@ -2,12 +2,10 @@ require 'json'
 
 class Operator < Object
 	attr_accessor :id
-	def initialize(id=0,type="")
+	def initialize()
 		super()
-		initializeWithType(type)
+		initializeWithType()
 		@ancestors = Array.new
-		self.id=id
-
 	end
 
 	def addEdgeTo(otherOperator)
@@ -15,12 +13,12 @@ class Operator < Object
 	end
 
 	def edgeArray(depth=0)
-		result = Array.new
+		result = Array.new(1) { self }
 		for ancestor in @ancestors
 			result = result.concat(ancestor.edgeArray(depth+1))
 		end
 		
-		return result.concat([self])
+		return result
 	end
 
 	def to_json(*a)
