@@ -16,6 +16,9 @@ def buildJSONForRootNode(rootOperator)
 	resultHash = {}
 	operatorsHash = {}
 	currentID = 0
+	
+
+	#build the operators
 	for operator in nodes
 		operator.id = currentID
 		operatorsHash[operator.id] = operator
@@ -23,6 +26,13 @@ def buildJSONForRootNode(rootOperator)
 	end
 
 	resultHash['operators'] = operatorsHash
+
+	#ids are assigned, now loop one more time to get the right edges
+	edges = Array.new()
+	for operator in nodes
+		edges = edges.concat(operator.edges())
+	end
+	resultHash['edges'] = edges
 
 	puts resultHash.to_json()
 end

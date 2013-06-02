@@ -21,6 +21,15 @@ class Operator < Object
 		return result
 	end
 
+	def edges()
+		result = Array.new()
+		for ancestor in @ancestors
+			result.push([self.id, ancestor.id])
+		end
+
+		return result
+	end
+
 	def to_json(*a)
 		{"type"=>@type}.to_json
 	end
