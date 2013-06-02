@@ -2,6 +2,10 @@ require "./operator"
 require "./tableload.rb"
 require "./simpletablescan.rb"
 
+require 'net/http'
+
+HYRISE_DEFAULT_URL = URI('http://localhost:5000/')
+
 def hashForOperators(operators=[])
 	hash = {}
 	for operator in operators
@@ -34,7 +38,23 @@ def buildJSONForRootNode(rootOperator)
 	end
 	resultHash['edges'] = edges
 
-	puts resultHash.to_json()
+	return resultHash.to_json()
+end
+
+def query(data, url = HYRISE_DEFAULT_URL)
+	req = Net::HTTP::Post.new("url.path")
+	req.set_form_data({:query=> data, :limit => 0})
+
+	response = Net::HTTP.new(url.host, url.port).start {|http|
+      http.read_timeout = nil
+      http.request(req)
+    }
+
+    response_body = response.body
+    json = JSON.parse(response_body)
+
+    jj json
+    json
 end
 
 =begin
@@ -75,5 +95,8 @@ op2.addPredicate(SCAN_TYPE::LT,0,"NAME2",V_TYPE::INTEGER,300)
 
 op1.addEdgeTo(op2)
 
-buildJSONForRootNode(op1)
+json = buildJSONForRootNode(op1)
+
+#POST the JSON to the HYRISE server that needs to be running
+query(json)
 
