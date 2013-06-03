@@ -24,7 +24,7 @@ class Operator < Object
 	def edges()
 		result = Array.new()
 		for ancestor in @ancestors
-			result.push([self.id, ancestor.id])
+			result.push([self.id.to_s(), ancestor.id.to_s()])
 		end
 
 		return result
