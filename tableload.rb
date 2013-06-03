@@ -17,7 +17,14 @@ class TableLoadOperator < Operator
 	end
 
 	def to_json(*a)
-		{"type"=>@type, "table"=>@tableName, "filename"=>@tableFileName, "header"=>@tableHeaderFileName}.to_json
+		#build the json structure
+		result = {"type"=>@type, "table"=>@tableName, "filename"=>@tableFileName}
+		
+		if not @tableHeaderFileName.nil?
+			result["header"] = @tableHeaderFileName
+		end
+
+		return result.to_json
 	end
 
 end

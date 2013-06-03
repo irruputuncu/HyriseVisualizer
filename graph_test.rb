@@ -84,9 +84,8 @@ buildJSONForRootNode(op1)
 op1 = TableLoadOperator.new()
 
 #set the values for the table load
-op1.setTableName("table name")
-op1.setTableFileName("filename.data")
-op1.setTableHeaderFileName("header.txt")
+op1.setTableName("companies")
+op1.setTableFileName("tables/companies.tbl")
 
 op2 = SimpleTableScanOperator.new()
 op2.addPredicate(SCAN_TYPE::OR)
