@@ -27,8 +27,28 @@ class SimpleTableScanOperator < Operator
 		@predicates = Array.new()
 	end
 
-	def addPredicate(type=SCAN_TYPE::EQ,in_type=0,f="",vtype=V_TYPE::INTEGER,value=0)
-		@predicates.push({"type"=>type,"in"=>in_type,"f"=>f,"vtype"=>vtype,"value"=>value})
+	def addPredicate(type=SCAN_TYPE::EQ,in_type=nil,f=nil,vtype=nil,value=nil)
+		#build the new predicate
+		predicate = {"type"=>type};
+
+		if not in_type.nil?
+			predicate["in"] = in_type
+		end
+
+		if not f.nil?
+			predicate["f"] = f
+		end
+
+		if not vtype.nil?
+			predicate["vtype"] = vtype
+		end
+
+		if not value.nil?
+			predicate["value"] = value
+		end
+
+
+		@predicates.push(predicate)
 	end
 
 	def to_json(*a)

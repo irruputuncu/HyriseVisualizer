@@ -89,13 +89,14 @@ op1.setTableFileName("tables/companies.tbl")
 
 op2 = SimpleTableScanOperator.new()
 op2.addPredicate(SCAN_TYPE::OR)
-op2.addPredicate(SCAN_TYPE::LT,0,"NAME1",V_TYPE::INTEGER,330)
-op2.addPredicate(SCAN_TYPE::LT,0,"NAME2",V_TYPE::INTEGER,300)
+op2.addPredicate(SCAN_TYPE::GT,0,"company_id",V_TYPE::INTEGER,2)
+op2.addPredicate(SCAN_TYPE::EQ,0,"company_name",V_TYPE::STRING,"Microsoft")
 
 op1.addEdgeTo(op2)
 
 json = buildJSONForRootNode(op1)
 
+puts json
 #POST the JSON to the HYRISE server that needs to be running
-query(json)
+#query(json)
 
