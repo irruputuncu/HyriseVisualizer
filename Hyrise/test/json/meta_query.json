@@ -1,0 +1,13 @@
+{
+    "operators": {
+    	"0": {
+            "type": "TableLoad",
+            "table": "companies",
+            "filename" : "tables/companies.tbl"
+        },
+		"1" : {
+		    "type" : "MetaData"
+		}
+    },
+    "edges": [["0","1"]]
+}

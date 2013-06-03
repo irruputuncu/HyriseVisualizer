@@ -42,7 +42,7 @@ def buildJSONForRootNode(rootOperator)
 end
 
 def query(data, url = HYRISE_DEFAULT_URL)
-	req = Net::HTTP::Post.new("url.path")
+	req = Net::HTTP::Post.new(url.path)
 	req.set_form_data({:query=> data, :limit => 0})
 
 	response = Net::HTTP.new(url.host, url.port).start {|http|
@@ -56,30 +56,6 @@ def query(data, url = HYRISE_DEFAULT_URL)
     jj json
     json
 end
-
-=begin
-op1 = Operator.new(0,"Project #0")
-op2 = Operator.new(1,"Natural join #0")
-op3 = Operator.new(2,"Project #1")
-op4 = Operator.new(3,"Project #2")
-op5 = Operator.new(4,"Select #0")
-op6 = Operator.new(5,"Natural join #1")
-op7 = Operator.new(6,"Select #1")
-op8 = Operator.new(7,"Select #2")
-op9 = Operator.new(8,"Select #3")
-
-op1.addEdgeTo(op2)
-op2.addEdgeTo(op3)
-op2.addEdgeTo(op4)
-op3.addEdgeTo(op5)
-op5.addEdgeTo(op6)
-op6.addEdgeTo(op7)
-op6.addEdgeTo(op8)
-op4.addEdgeTo(op9)
-
-buildJSONForRootNode(op1)
-
-=end
 
 op1 = TableLoadOperator.new()
 
@@ -96,7 +72,6 @@ op1.addEdgeTo(op2)
 
 json = buildJSONForRootNode(op1)
 
-puts json
 #POST the JSON to the HYRISE server that needs to be running
-#query(json)
+query(json)
 

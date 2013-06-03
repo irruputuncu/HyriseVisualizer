@@ -1,0 +1,9 @@
+[submodule "Hyrise/third_party/ebb"]
+	path = Hyrise/third_party/ebb
+	url = git://github.com/grundprinzip/libebb.git
+[submodule "Hyrise/third_party/ftprinter"]
+	path = Hyrise/third_party/ftprinter
+	url = git://github.com/lordgeorg/formatted-table-printer.git
+[submodule "Hyrise/third_party/backward"]
+	path = Hyrise/third_party/backward
+	url = git://github.com/bastih/backward-cpp.git
