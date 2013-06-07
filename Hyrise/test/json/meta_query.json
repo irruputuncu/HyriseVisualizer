@@ -5,9 +5,20 @@
             "table": "companies",
             "filename" : "tables/companies.tbl"
         },
-		"1" : {
-		    "type" : "MetaData"
+        "1": {
+            "type": "TableLoad",
+            "table": "lin_xxs",
+            "filename" : "lin_xxs.tbl"
+        },
+        "2": {
+            "type": "TableLoad",
+            "table": "employees",
+            "filename" : "tables/employees.tbl"
+        },
+		"3" : {
+		    "type" : "MetaData",
+            "input" : ["companies", "lin_xxs"]  //employees imput from table load
 		}
     },
-    "edges": [["0","1"]]
+    "edges": [["0","1"],["1","2"],["2","3"]]
 }
