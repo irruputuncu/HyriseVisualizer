@@ -1,8 +1,8 @@
 // Copyright (c) 2012 Hasso-Plattner-Institut fuer Softwaresystemtechnik GmbH. All rights reserved.
 #include "access/MetaData.h"
 
-#include "access/QueryParser.h"
-#include "access/BasicParser.h"
+#include "access/system/QueryParser.h"
+#include "access/system/BasicParser.h"
 
 #include "io/StorageManager.h"
 
@@ -40,27 +40,45 @@ void MetaData::executePlanOperation() {
   auto meta_data = TableBuilder::build(list);
 
   size_t row_count = 0;
+  const auto &storageManager = StorageManager::getInstance();
+  const auto& loaded_tables = storageManager->all();
 
-  for (size_t i = 0; i < input.numberOfTables(); ++i) {  //iterate over all input tables
-    
-    const auto& in = input.getTable(i);
-    const auto& loaded_tables = StorageManager::getInstance()->all();
-    std::string tablename = "unknown/temporary";
+  if (input.numberOfTables() <= 0) {
 
-    for (const auto& table: loaded_tables) {
-      if (table.second == in) {
-        tablename = table.first;
-        break;
+    for (const auto & tableName: storageManager->getTableNames()) {
+      auto table = storageManager->getTable(tableName);
+      for (field_t i = 0; i != table->columnCount(); ++i) {
+        meta_data->resize(meta_data->size() + 1);
+        meta_data->setValue<hyrise_string_t>("table", row_count, tableName);
+        meta_data->setValue<hyrise_string_t>("column", row_count, table->metadataAt(i)->getName());
+        meta_data->setValue<hyrise_int_t>("data_type", row_count, table->metadataAt(i)->getType());
+
+        ++row_count;
       }
     }
 
-    for (field_t j = 0; j != in->columnCount(); ++j) {
-      meta_data->resize(meta_data->size() + 1);
-      meta_data->setValue<hyrise_string_t>("table", row_count, tablename);
-      meta_data->setValue<hyrise_string_t>("column", row_count, in->metadataAt(j)->getName());
-      meta_data->setValue<hyrise_int_t>("data_type", row_count, in->metadataAt(j)->getType());
+  } else {
 
-      ++row_count;
+    for (size_t i = 0; i < input.numberOfTables(); ++i) {  //iterate over all input tables
+      
+      const auto& in = input.getTable(i);
+      std::string tablename = "unknown/temporary";
+
+      for (const auto& table: loaded_tables) {
+        if (table.second == in) {
+          tablename = table.first;
+          break;
+        }
+      }
+
+      for (field_t j = 0; j != in->columnCount(); ++j) {
+        meta_data->resize(meta_data->size() + 1);
+        meta_data->setValue<hyrise_string_t>("table", row_count, tablename);
+        meta_data->setValue<hyrise_string_t>("column", row_count, in->metadataAt(j)->getName());
+        meta_data->setValue<hyrise_int_t>("data_type", row_count, in->metadataAt(j)->getType());
+
+        ++row_count;
+      }
     }
   }
 

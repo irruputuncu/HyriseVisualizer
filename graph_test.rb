@@ -1,6 +1,7 @@
 require "./operator"
 require "./tableload.rb"
 require "./simpletablescan.rb"
+require "./metadata.rb"
 
 require 'net/http'
 
@@ -57,21 +58,25 @@ def query(data, url = HYRISE_DEFAULT_URL)
     json
 end
 
-op1 = TableLoadOperator.new()
+op1 = TableLoadOperator.new
 
 #set the values for the table load
 op1.setTableName("companies")
 op1.setTableFileName("tables/companies.tbl")
 
-op2 = SimpleTableScanOperator.new()
+op2 = SimpleTableScanOperator.new
 op2.addPredicate(SCAN_TYPE::OR)
 op2.addPredicate(SCAN_TYPE::GT,0,"company_id",V_TYPE::INTEGER,2)
 op2.addPredicate(SCAN_TYPE::EQ,0,"company_name",V_TYPE::STRING,"Microsoft")
 
+op3 = MetaDataOperator.new
+
 op1.addEdgeTo(op2)
+op2.addEdgeTo(op3)
 
 json = buildJSONForRootNode(op1)
 
+puts json
+
 #POST the JSON to the HYRISE server that needs to be running
 query(json)
-
