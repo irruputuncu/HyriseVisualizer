@@ -24,7 +24,7 @@ def buildJSONForRootNode(rootOperator)
 	
 
 	#build the operators
-	for operator in nodes
+	for operator in nodes.uniq
 		operator.id = currentID
 		operatorsHash[operator.id] = operator
 		currentID += 1
@@ -73,10 +73,11 @@ op3 = MetaDataOperator.new
 
 op1.addEdgeTo(op2)
 op2.addEdgeTo(op3)
+op1.addEdgeTo(op3)
 
-json = buildJSONForRootNode(op1)
+json = buildJSONForRootNode(op3)
 
-puts json
+puts JSON.pretty_generate(JSON.parse(json))
 
 #POST the JSON to the HYRISE server that needs to be running
-query(json)
+#query(json)

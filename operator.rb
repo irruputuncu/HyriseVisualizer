@@ -1,7 +1,8 @@
 require 'json'
 
 class Operator < Object
-	attr_accessor :id
+	attr_accessor :id, :ancestors
+
 	def initialize()
 		super()
 		initializeWithType()
@@ -9,13 +10,13 @@ class Operator < Object
 	end
 
 	def addEdgeTo(otherOperator)
-		@ancestors.push(otherOperator)
+		otherOperator.ancestors << self
 	end
 
 	def edgeArray(depth=0)
 		result = Array.new(1) { self }
 		for ancestor in @ancestors
-			result = result.concat(ancestor.edgeArray(depth+1))
+			result = ancestor.edgeArray(depth+1).concat(result)
 		end
 		
 		return result
@@ -24,7 +25,7 @@ class Operator < Object
 	def edges()
 		result = Array.new()
 		for ancestor in @ancestors
-			result.push([self.id.to_s(), ancestor.id.to_s()])
+			result.push([ancestor.id.to_s(), self.id.to_s()])
 		end
 
 		return result

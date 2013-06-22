@@ -1,3 +1,8 @@
 <h1> Welcome to the HYRISE Visualizer </h1>
 
 <div id="container" style="width:100%; height:400px;"></div>
+
+<p> <%= @meta.loadTable('companies', 'tables/companies.tbl') %> </p>
+<p> <%= @meta.getColumnsForTable('companies') %> </p>
+<p> <%= @meta.getContentOfColumns('companies', 'tables/companies.tbl', ['comnpany_id', 'company_name']) %> </p>
+<p> <%= @meta.getTables %> </p>
