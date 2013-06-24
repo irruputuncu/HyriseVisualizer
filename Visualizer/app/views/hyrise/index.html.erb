@@ -1,8 +1,36 @@
-<h1> Welcome to the HYRISE Visualizer </h1>
+<div class="container">
 
-<div id="container" style="width:100%; height:400px;"></div>
+	<div id="title" class="navbar">
+		<div class="navbar-inner">
+			<a class="brand" href="#">HYRISE Visualizer</a>
 
-<p> <%= @meta.loadTable('companies', 'tables/companies.tbl') %> </p>
-<p> <%= @meta.getColumnsForTable('companies') %> </p>
-<p> <%= @meta.getContentOfColumns('companies', 'tables/companies.tbl', ['comnpany_id', 'company_name']) %> </p>
-<p> <%= @meta.getTables %> </p>
+			<form class="navbar-form pull-right">
+				<input type="text" class="span2" placeholder="table name">
+				<input type="text" class="span2" placeholder="table file">
+				<button type="submit" class="btn">Load New Table</button>
+			</form>
+
+		</div>
+	</div>
+
+	<div id="attributes">
+		<h3> Attributes </h3>
+		<div class="btn disabled">Id</div>
+		<div class="btn disabled">Name</div>
+		<div class="btn disabled">Surname</div>
+		<div class="btn disabled">Name</div>
+		<div class="btn disabled">Company</div>
+	</div>
+	<div id="graphOptions"></div>
+	<div id="ySettings">
+		<h3> y-Axis </h3>
+	</div>
+	<div id="graph" style="width:100%; height:400px;"></div>
+	<div id="oppositeYSettings">
+		<h3> opposite y-Axis </h3>
+	</div>
+	<div id="xSettings">
+		<h3> x-Axis </h3>
+	</div>
+	
+</div>
