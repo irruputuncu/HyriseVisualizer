@@ -35,6 +35,14 @@ body, html {
 	position: relative;
 	border-right: $borderWidth solid $borderColor;
 
+	.subHeading {
+		margin-top: 10px;
+		text-transform: uppercase;
+		font-weight: bold;
+		font-size: 11px;
+		line-height: 20px;
+		color: #999999;
+	}
 	.btn.disabled {
 		width: 70%;
 		margin: 3px;
