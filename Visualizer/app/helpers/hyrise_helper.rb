@@ -1,0 +1,2 @@
+module HyriseHelper
+end

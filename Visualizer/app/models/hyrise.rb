@@ -6,7 +6,7 @@ require 'operators/tableload.rb'
 require 'operators/projectionscan.rb'
 require 'operators/simpletablescan.rb'
 
-class MetaData
+class Hyrise
 
 	HYRISE_DEFAULT_URL = URI('http://localhost:5000/')
 
