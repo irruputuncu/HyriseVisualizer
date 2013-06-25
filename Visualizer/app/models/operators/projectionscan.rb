@@ -3,7 +3,12 @@ class ProjectionScanOperator < Operator
 	def initialize
 		super
 		@fields = Array.new
+		@inputs = Array.new
 		initializeWithType("ProjectionScan")
+	end
+
+	def addInput(table) 
+		@inputs << table
 	end
 
 	def addField(field)
@@ -11,7 +16,7 @@ class ProjectionScanOperator < Operator
 	end
 
 	def as_json(*a)
-		{"type" => @type, "fields" => @fields}
+		{"type" => @type, "fields" => @fields, "input" => @inputs}
 	end
 
 end

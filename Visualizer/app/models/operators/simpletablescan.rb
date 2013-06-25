@@ -24,7 +24,12 @@ class SimpleTableScanOperator < Operator
 	def initialize()
 		super()
 		initializeWithType("SimpleTableScan")
-		@predicates = Array.new()
+		@predicates = Array.new
+		@inputs = Array.new
+	end
+
+	def addInput(table)
+		@inputs << table
 	end
 
 	def addPredicate(type=SCAN_TYPE::EQ,in_type=nil,f=nil,vtype=nil,value=nil)
@@ -52,7 +57,7 @@ class SimpleTableScanOperator < Operator
 	end
 
 	def as_json(*a)
-		{"type"=>@type, "predicates"=>@predicates}
+		{"type"=>@type, "predicates"=>@predicates, "input" => @inputs}
 	end
 
 end

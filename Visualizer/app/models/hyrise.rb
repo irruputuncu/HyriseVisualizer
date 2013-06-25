@@ -32,17 +32,12 @@ class Hyrise
 		return executeQuery metaOperator.getQuery
 	end
 
-	def getContentOfColumns(tablename, tablefile, columns)
-		loadOperator = TableLoadOperator.new
-		loadOperator.setTableName tablename
-		loadOperator.setTableFileName tablefile
-
+	def getContentOfColumns(tablename, columns)
 		projectionOperator = ProjectionScanOperator.new
+		projectionOperator.addInput tablename 
 		columns.each do |column|
 			projectionOperator.addField column
 		end
-
-		loadOperator.addEdgeTo(projectionOperator)
 
 		return executeQuery projectionOperator.getQuery
 	end
