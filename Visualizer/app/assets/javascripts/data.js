@@ -30,7 +30,13 @@ $(document).ready(function () {
     }); 
 
     $(function() {
-        $( ".axisDroppableContainer" ).sortable( { connectWith : '.axisDroppableContainer'});
+        $( ".axisDroppableContainer" ).sortable( { connectWith : '.axisDroppableContainer',
+                                                    receive: function (event, ui){
+                                                        if ($('#ySettings .btn').length > 0 && $('#xSettings .btn').length > 0){
+                                                            alert('Trigger datasource NOW');
+                                                        }
+                                                    }
+                                                });
     }); 
 
     $(function() {
