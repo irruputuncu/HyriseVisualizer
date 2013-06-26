@@ -10,6 +10,11 @@ class DataController < ApplicationController
 		redirect_to root_url
 	end
 
+	def get_columns
+		@data.getContentOfColumns(params[:tablename], params[:columns]) unless params[:tablename].blank? || params[:columns].blank?
+		redirect_to root_url
+	end
+
 	protected
 
 		def load_data_model

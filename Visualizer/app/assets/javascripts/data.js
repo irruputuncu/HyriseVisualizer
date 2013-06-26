@@ -33,10 +33,29 @@ $(document).ready(function () {
         $( ".axisDroppableContainer" ).sortable( { connectWith : '.axisDroppableContainer',
                                                     receive: function (event, ui){
                                                         if ($('#ySettings .btn').length > 0 && $('#xSettings .btn').length > 0){
-                                                            alert('Trigger datasource NOW');
+                                                            var columns = [];
+
+                                                            $('#ySettings .btn').each(function(){
+                                                                columns.push($(this).data("column"));
+                                                            });
+
+                                                            $('#xSettings .btn').each(function(){
+                                                                columns.push($(this).data("column"));
+                                                            });
+
+
+                                                            $.ajax({
+                                                                  url: 'getColumns?tablename=test',
+                                                                  type: "POST",
+                                                                  data: {columns: columns},
+                                                                  dataType: "script",
+                                                                  error: function(jqXHR, textStatus, errorThrown) {
+                                                                        console.log(textStatus);
+                                                                  }
+                                                                });
                                                         }
                                                     }
-                                                });
+                                        });
     }); 
 
     $(function() {

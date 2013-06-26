@@ -15,10 +15,10 @@
 
 	<div id="attributes">
 		<h3> Attributes </h3>
-		<div class="subHeading"> Employees </div>
-		<div class="btn disabled">Id</div>
-		<div class="btn disabled">Name</div>
-		<div class="btn disabled">Surname</div>
+		<div class="subHeading" > Employees </div>
+		<div class="btn disabled" data-column="id">Id</div>
+		<div class="btn disabled" data-column="name">Name</div>
+		<div class="btn disabled" data-column="surname">Surname</div>
 		<div class="btn disabled">Name</div>
 		<div class="btn disabled">Company</div>
 
@@ -30,7 +30,7 @@
 		<% @scheme.each_pair do | table, columns| %>
 			<div class="subHeading"> <%= table %> </div>
 			<% columns.each do | column | %>
-				<div class="btn disabled"> <%= column %> </div>
+				<div class="btn disabled" data-column="<%= column %>"> <%= column %> </div>
 			<% end %>
 		<% end %>
 	</div>
