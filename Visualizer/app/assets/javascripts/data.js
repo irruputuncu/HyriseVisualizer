@@ -26,7 +26,14 @@ $(document).ready(function () {
 
 
     $(function() {
-        $( ".btn" ).draggable();
+        $( ".btn" ).draggable({ revert: 'invalid' });
+
+
     }); 
+
+    $(function() {
+        $( ".settings" ).droppable({ accept: '.btn' });
+    }); 
+
 });
 
