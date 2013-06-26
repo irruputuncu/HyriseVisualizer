@@ -23,8 +23,11 @@ class Hyrise
 
 		tables = Hash.new
 		result = executeQuery metaOperator.getQuery
-		result['rows'] ||= [] .each do | row |
-			(tables[row.first] ||= []) << row.second
+		
+		if !result['rows'].nil?
+			result['rows'].each do | row |
+				(tables[row.first] ||= []) << row.second
+			end
 		end
 
 		return tables
