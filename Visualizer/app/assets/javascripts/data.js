@@ -26,13 +26,15 @@ $(document).ready(function () {
 
 
     $(function() {
-        $( ".btn" ).draggable({ revert: 'invalid' });
-
-
+        //$( ".btn" ).draggable({ revert: 'invalid', connectToSortable: '#attributes' });
     }); 
 
     $(function() {
-        $( ".settings" ).droppable({ accept: '.btn' });
+        $( ".axisDroppableContainer" ).sortable( { connectWith : '.axisDroppableContainer'});
+    }); 
+
+    $(function() {
+        $( "#attributes" ).sortable( { connectWith : '.axisDroppableContainer'});
     }); 
 
 });
