@@ -1,3 +1,4 @@
+
 $(document).ready(function () { 
     $('#graph').highcharts({
         chart: {
@@ -22,4 +23,10 @@ $(document).ready(function () {
             data: [5, 7, 3]
         }]
     });
-})
+
+
+    $(function() {
+        $( ".btn" ).draggable();
+    }); 
+});
+
