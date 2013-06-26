@@ -21,12 +21,17 @@ class Hyrise
 	def getTables
 		metaOperator = MetaDataOperator.new
 
-		result = executeQuery metaOperator.getQuery
 		tables = Hash.new
+
+		begin
+		result = executeQuery metaOperator.getQuery
 		result['rows'].each do | row |
 			(tables[row.first] ||= []) << row.second
 		end
 
+		rescue
+
+		end
 		return tables
 	end
 
