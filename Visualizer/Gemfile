@@ -32,3 +32,6 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+
+#To use jquery-ui
+gem "jquery-ui-rails", "~> 4.0.3"

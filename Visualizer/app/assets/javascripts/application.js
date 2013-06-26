@@ -14,3 +14,4 @@
 //= require jquery_ujs
 //= require highcharts/highcharts.js
 //= require meta_data.js
+//= require jquery.ui.all
