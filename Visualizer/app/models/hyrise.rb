@@ -15,7 +15,7 @@ class Hyrise
 		loadOperator.setTableName tablename
 		loadOperator.setTableFileName tablefile
 
-		return executeQuery loadOperator.getQuery
+		return (executeQuery loadOperator.getQuery).encode
 	end
 
 	def getTables

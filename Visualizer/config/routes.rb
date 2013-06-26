@@ -1,6 +1,8 @@
 Visualizer::Application.routes.draw do
 
-  root :to => 'hyrise#index'
+  root :to => 'data#index'
+
+  match '/loadTable' => 'data#load_table'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

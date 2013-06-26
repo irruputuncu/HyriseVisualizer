@@ -4,11 +4,11 @@
 		<div class="navbar-inner">
 			<a class="brand" href="#">HYRISE Visualizer</a>
 
-			<form class="navbar-form pull-right">
-				<input type="text" class="span2" placeholder="table name">
-				<input type="text" class="span2" placeholder="table file">
-				<button type="submit" class="btn">Load New Table</button>
-			</form>
+			<%= form_tag({controller: 'data', action: 'load_table'}, {:class => 'navbar-form pull-right'}) do %>
+				<%= text_field_tag(:table, nil, { placeholder: 'Table Name', :class => 'span2'}) %>
+				<%= text_field_tag(:file, nil, { placeholder: 'Table File', :class => 'span2'}) %>
+				<%= submit_tag('Load New Table', :class => 'btn') %>
+			<% end %>
 
 		</div>
 	</div>
