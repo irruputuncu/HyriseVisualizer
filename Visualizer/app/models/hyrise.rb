@@ -22,16 +22,11 @@ class Hyrise
 		metaOperator = MetaDataOperator.new
 
 		tables = Hash.new
-
-		begin
 		result = executeQuery metaOperator.getQuery
-		result['rows'].each do | row |
+		result['rows'] ||= [] .each do | row |
 			(tables[row.first] ||= []) << row.second
 		end
 
-		rescue
-
-		end
 		return tables
 	end
 
@@ -58,10 +53,16 @@ class Hyrise
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})
 
-			response = Net::HTTP.new(url.host, url.port).start {|http|
-		      http.read_timeout = nil
-		      http.request(req)
-		    }
+			begin
+
+				response = Net::HTTP.new(url.host, url.port).start {|http|
+			      http.read_timeout = nil
+			      http.request(req)
+			    }
+				
+			rescue Exception => e
+				return Hash.new
+			end
 
 		    response_body = response.body
 		    json = JSON.parse(response_body)
