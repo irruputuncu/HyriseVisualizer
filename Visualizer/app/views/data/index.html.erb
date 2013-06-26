@@ -26,6 +26,13 @@
 		<div class="btn disabled">Id</div>
 		<div class="btn disabled">Name</div>
 		<div class="btn disabled">Manager</div>
+
+		<% @scheme.each_pair do | table, columns| %>
+			<div class="subHeading"> <%= table %> </div>
+			<% columns.each do | column | %>
+				<div class="btn disabled"> <%= column %> </div>
+			<% end %>
+		<% end %>
 	</div>
 	<div id="graphOptions"></div>
 	<div id="ySettings">

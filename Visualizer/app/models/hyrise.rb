@@ -15,13 +15,19 @@ class Hyrise
 		loadOperator.setTableName tablename
 		loadOperator.setTableFileName tablefile
 
-		return (executeQuery loadOperator.getQuery).encode
+		return executeQuery loadOperator.getQuery
 	end
 
 	def getTables
 		metaOperator = MetaDataOperator.new
 
-		return executeQuery metaOperator.getQuery
+		result = executeQuery metaOperator.getQuery
+		tables = Hash.new
+		result['rows'].each do | row |
+			(tables[row.first] ||= []) << row.second
+		end
+
+		return tables
 	end
 
 	# get the meta data for a specific table. This function assumes that the table is already loaded.

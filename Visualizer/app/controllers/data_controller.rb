@@ -2,6 +2,7 @@ class DataController < ApplicationController
 	before_filter :load_data_model
 
 	def index
+		@scheme = @data.getTables
 	end
 
 	def load_table
