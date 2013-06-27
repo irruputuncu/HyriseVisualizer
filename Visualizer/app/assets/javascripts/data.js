@@ -29,6 +29,12 @@ $(document).ready(function () {
         //$( ".btn" ).draggable({ revert: 'invalid', connectToSortable: '#attributes' });
     }); 
 
+    $(function(){
+        $(".modeSelect").click(function(){
+            $(this).parent().parent().parent().parent().attr('data-mode',$(this).attr('mode'));
+        });
+    });
+
     $(function() {
         $( ".axisDroppableContainer" ).sortable( { connectWith : '.axisDroppableContainer',
                                                     receive: function (event, ui){

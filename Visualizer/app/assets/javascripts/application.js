@@ -15,3 +15,4 @@
 //= require highcharts/highcharts.js
 //= require data.js
 //= require jquery.ui.all
+//= require bootstrap
