@@ -42,6 +42,7 @@ class Hyrise
 	end
 
 	def getContentOfColumns(tablename, columns)
+		puts columns
 		projectionOperator = ProjectionScanOperator.new
 		projectionOperator.addInput tablename 
 		columns.each do |column|

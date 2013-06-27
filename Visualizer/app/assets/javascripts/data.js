@@ -41,13 +41,15 @@ $(document).ready(function () {
                                                         if ($('#ySettings .btn').length > 0 && $('#xSettings .btn').length > 0){
                                                             var columns = [];
 
-                                                            $('#ySettings .btn').each(function(){
-                                                                columns.push($(this).data("column"));
-                                                            });
+                                                            var collectFunction = function(){
+                                                                var data = {};
+                                                                data[$(this).data("mode")] = $(this).data("column");
+                                                                columns.push(data);
+                                                            };
 
-                                                            $('#xSettings .btn').each(function(){
-                                                                columns.push($(this).data("column"));
-                                                            });
+                                                            $('#ySettings .btn').each(collectFunction);
+
+                                                            $('#xSettings .btn').each(collectFunction);
 
 
                                                             $.ajax({
