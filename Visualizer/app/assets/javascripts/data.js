@@ -27,7 +27,7 @@ $(document).ready(function () {
 
     $(function(){
         $(".modeSelect").click(function(){
-            $(this).parent().parent().parent().parent().attr('data-mode',$(this).attr('mode'));
+            $(this).parents('.column').attr('data-mode',$(this).attr('mode'));
             $(this).parent().parent().siblings('.actionSelect').html($(this).text()+'<span class="caret">');
         });
     });
