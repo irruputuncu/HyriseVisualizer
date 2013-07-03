@@ -35,6 +35,12 @@ $(document).ready(function () {
     $(function() {
         $( ".axisDroppableContainer" ).sortable( { 
             connectWith : '.axisDroppableContainer',
+            over: function(event, ui){
+                $(this).addClass("hoverDroppable");
+            },
+            out: function(event, ui){
+                $(this).removeClass("hoverDroppable");
+            },
             receive: function(event, ui) {
                 if ($('#ySettings .btn').length > 0 && $('#xSettings .btn').length > 0) {
                     var columns = [];
