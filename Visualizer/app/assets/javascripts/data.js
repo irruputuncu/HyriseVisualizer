@@ -1,7 +1,9 @@
+var chart;
 
 $(document).ready(function () { 
-    $('#graph').highcharts({
+    chart = new Highcharts.Chart({
         chart: {
+            renderTo: 'graph',
             type: 'bar'
         },
         title: {
@@ -36,46 +38,48 @@ $(document).ready(function () {
     });
 
     $(function() {
-        $( ".axisDroppableContainer" ).sortable( { connectWith : '.axisDroppableContainer',
-                                                    receive: function (event, ui){
-                                                        if ($('#ySettings .btn').length > 0 && $('#xSettings .btn').length > 0){
-                                                            var columns = [];
+        $( ".axisDroppableContainer" ).sortable( { 
+            connectWith : '.axisDroppableContainer',
+            receive: function(event, ui) {
+                if ($('#ySettings .btn').length > 0 && $('#xSettings .btn').length > 0) {
+                    var columns = [];
 
-                                                            var collectFunction = function(){
-                                                                var data = {};
-                                                                data["mode"] = $(this).data("mode");
-                                                                data["column"] = $(this).data("column");
-                                                                columns.push(data);
-                                                            };
+                    var collectFunction = function(){
+                        var data = {};
+                        data["mode"] = $(this).data("mode");
+                        data["column"] = $(this).data("column");
+                        columns.push(data);
+                    };
 
-                                                            $('#ySettings .btn.disabled').each(collectFunction);
+                    $('#ySettings .btn.disabled').each(collectFunction);
 
-                                                            $('#xSettings .btn.disabled').each(collectFunction);
 
-                                                            console.log(columns)
+                    $('#xSettings .btn.disabled').each(collectFunction);
 
-                                                            $.ajax({
-                                                                  url: 'getColumns?tablename=test',
-                                                                  type: "POST",
-                                                                  data: {columns: columns},
-                                                                  dataType: "script",
-                                                                  error: function(jqXHR, textStatus, errorThrown) {
-                                                                        console.log(textStatus);
-                                                                  },
-                                                                  complete: function(jqXHR, textStatus ){
-                                                                        json = JSON.parse(jqXHR.responseText);
+                    console.log(columns)
 
-                                                                        if(json.hasOwnProperty("error")){
-                                                                            alert(json["error"]);
-                                                                        }else{
-                                                                            //load the graph!
-                                                                            alert("Loading graph ...");
-                                                                        }
-                                                                  }
-                                                                });
-                                                        }
-                                                    }
-                                        });
+                    $.ajax({
+                        url: 'getColumns?tablename=test',
+                        type: "POST",
+                        data: {columns: columns},
+                        dataType: "script",
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus);
+                        },
+                        complete: function(jqXHR, textStatus ){
+                            json = JSON.parse(jqXHR.responseText);
+
+                            if(json.hasOwnProperty("error")){
+                                alert(json["error"]);
+                            }else{
+                                //load the graph!
+                                alert("Loading graph ...");
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }); 
 
     $(function() {
