@@ -64,7 +64,7 @@
 		<% @scheme.each_pair do | table, columns| %>
 			<div class="subHeading"> <%= table %> </div>
 			<% columns.each do | column | %>
-				<div class="btn disabled" data-column="<%= column %>" data-mode="select"> <%= column %> 
+				<div class="btn disabled" data-column="<%= column %>" data-table="<%= table %>" data-mode="select"> <%= column %> 
 					<div class="btn-group" style="float:right;">
 				<button class="btn btn-mini dropdown-toggle"  data-toggle="dropdown">Action<span class="caret"></span></button>
 

@@ -54,7 +54,7 @@ class Hyrise
 		end
 
 		results =  executeQuery projectionOperator.getQuery
-
+		puts results
 		output = Hash.new;
 
 		header = results["header"]
@@ -63,6 +63,7 @@ class Hyrise
 			output[column] = Array.new
 			results['rows'].each do | row |
 				output[column].push row[index]
+			end
 		end
 
 		return output

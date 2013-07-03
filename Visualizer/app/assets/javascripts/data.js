@@ -3,27 +3,21 @@ var chart;
 $(document).ready(function () { 
     chart = new Highcharts.Chart({
         chart: {
-            renderTo: 'graph',
-            type: 'bar'
+            renderTo: 'graph'
         },
         title: {
             text: 'Fruit Consumption'
         },
         xAxis: {
-            categories: ['Apples', 'Bananas', 'Oranges']
+            title: {
+                text: 'Stuff'
+            }
         },
         yAxis: {
             title: {
                 text: 'Fruit eaten'
             }
-        },
-        series: [{
-            name: 'Jane',
-            data: [1, 0, 4]
-        }, {
-            name: 'John',
-            data: [5, 7, 3]
-        }]
+        }
     });
 
 
@@ -44,11 +38,15 @@ $(document).ready(function () {
                 if ($('#ySettings .btn').length > 0 && $('#xSettings .btn').length > 0) {
                     var columns = [];
 
+                    var table;
+
                     var collectFunction = function(){
                         var data = {};
                         data["mode"] = $(this).data("mode");
                         data["column"] = $(this).data("column");
                         columns.push(data);
+
+                        table = $(this).data("table");
                     };
 
                     $('#ySettings .btn.disabled').each(collectFunction);
@@ -56,10 +54,12 @@ $(document).ready(function () {
 
                     $('#xSettings .btn.disabled').each(collectFunction);
 
-                    console.log(columns)
+                    xAxisColumn = $('#xSettings .btn.disabled').data("column");
+                    yAxisColumn = $('#ySettings .btn.disabled').data("column");
+
 
                     $.ajax({
-                        url: 'getColumns?tablename=test',
+                        url: 'getColumns?tablename='+table,
                         type: "POST",
                         data: {columns: columns},
                         dataType: "script",
@@ -67,13 +67,20 @@ $(document).ready(function () {
                             console.log(textStatus);
                         },
                         complete: function(jqXHR, textStatus ){
-                            json = JSON.parse(jqXHR.responseText);
+                            json = $.parseJSON(jqXHR.responseText);
 
                             if(json.hasOwnProperty("error")){
                                 alert(json["error"]);
                             }else{
                                 //load the graph!
-                                alert("Loading graph ...");
+                                chart.setTitle({text:table});
+
+                                chart.xAxis[0].setCategories(json[xAxisColumn], true);
+                                chart.xAxis[0].setTitle({text:xAxisColumn}, true);
+
+                                chart.addSeries({name: yAxisColumn,
+                                                        data: json[yAxisColumn]
+                                                        }, true);
                             }
                         }
                     });
