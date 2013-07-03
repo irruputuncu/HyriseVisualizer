@@ -46,13 +46,26 @@ class Hyrise
 
 		projectionOperator = ProjectionScanOperator.new
 		projectionOperator.addInput tablename 
+		
 		columns.each do |column|
 			if column["mode"] == "select"
 				projectionOperator.addField column["column"]
 			end
 		end
-		puts projectionOperator.getQuery
-		return executeQuery projectionOperator.getQuery
+
+		results =  executeQuery projectionOperator.getQuery
+
+		output = Hash.new;
+
+		header = results["header"]
+		header.each do | column |
+			index = header.index(column)
+			output[column] = Array.new
+			results['rows'].each do | row |
+				output[column].push row[index]
+		end
+
+		return output
 	end
 
 	protected
