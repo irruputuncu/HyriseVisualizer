@@ -75,7 +75,6 @@ $(document).ready(function () {
                         },
                         complete: function(jqXHR, textStatus ){
                             json = $.parseJSON(jqXHR.responseText);
-
                             if(json.hasOwnProperty("error")){
                                 alert(json["error"]);
                             }else{
@@ -90,20 +89,33 @@ $(document).ready(function () {
                                                         }, true);
 
                                 //load the simple data table on top of the graph
-                                $('#dataTable .dataTableRow').each(function(){
+                                $('#dataTable').children().each(function(){
                                     $(this).remove();
                                 });
+                                console.log(Object.keys(json).constructor);
+                                var keys = Object.keys(json);
+                                var headers = '<tr>';
 
-                                json['rows'].foreach(function (){
+                                $.each(keys,function(index,val){
+                                    if(val != 'rows')
+                                        headers = headers + '<th>'+val+'</th>';
+                                })
+
+                                headers = headers + '</tr>';
+
+                                $('#dataTable').append(headers);
+
+                                for(var i = 0; i < json['rows'].length; i++){
                                     var html = '<tr class="dataTableRow">';
 
-                                    this.foreach(function (){
-                                        html = html + '<td>' + this + '</td>';
-                                    });
+                                    for(var j = 0; j < json['rows'][i].length; j++){
+                                        html = html + '<td>' + json['rows'][i][j] + '</td>';
+                                    }
 
-                                    html = html + '</tr';
+                                    html = html + '</tr>';
                                     $('#dataTable').append(html);
-                                });
+                                }
+
                             }
                         }
                     });

@@ -4,18 +4,18 @@
 		<div class="navbar-inner">
 			<a class="brand" href="#">HYRISE Visualizer</a>
 
-			<!--<%= form_tag({controller: 'data', action: 'load_table'}, {:class => 'navbar-form pull-right'}) do %>
-			#	<%= text_field_tag(:table, nil, { placeholder: 'Table Name', :class => 'span2'}) %>
-			#	<%= text_field_tag(:file, nil, { placeholder: 'Table File', :class => 'span2'}) %>
-			#	<%= submit_tag('Load New Table', :class => 'btn') %>
-			<% end %> -->
-			<form class="navbar-form pull-right">
+			<%= form_tag({controller: 'data', action: 'load_table'}, {:class => 'navbar-form pull-right'}) do %>
+				<%= text_field_tag(:table, nil, { placeholder: 'Table Name', :class => 'span2'}) %>
+				<%= text_field_tag(:file, nil, { placeholder: 'Table File', :class => 'span2'}) %>
+				<%= submit_tag('Load New Table', :class => 'btn') %>
+			<% end %> 
+			<!--<form class="navbar-form pull-right">
 				<select>
 					<option value="tables/employees.tbl">employees</option>
 					<option value="tables/companies.tbl">companies</option>
 				</select>
 				<input type="submit" class="btn btn-primary" value="Load"></input>
-			</form>
+			</form>-->
 
 		</div>
 	</div>

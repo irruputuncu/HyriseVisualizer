@@ -69,10 +69,12 @@ class Hyrise
 		else
 			query = projectionOperator.getQuery
 		end
-		puts query
+		#puts query
 		results =  executeQuery query
 		#puts results
 		output = Hash.new;
+
+		output['rows'] = results['rows']
 
 		header = results["header"]
 		header.each do | column |
@@ -83,8 +85,8 @@ class Hyrise
 			end
 		end
 
-		output['rows'] = results['rows']
-
+		
+		#puts output['rows']
 		return output
 	end
 
