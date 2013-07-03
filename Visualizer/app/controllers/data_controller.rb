@@ -11,8 +11,9 @@ class DataController < ApplicationController
 	end
 
 	def get_columns
-		@data.getContentOfColumns(params[:tablename], params[:columns]) unless params[:tablename].blank? || params[:columns].blank?
-		redirect_to root_url
+		results = @data.getContentOfColumns(params[:tablename], params[:columns]) unless params[:tablename].blank? || params[:columns].blank?
+
+		render json: results
 	end
 
 	protected

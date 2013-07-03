@@ -42,13 +42,16 @@ class Hyrise
 	end
 
 	def getContentOfColumns(tablename, columns)
-		puts columns
+		columns = columns.values.sort_by { |v| v["mode"]}
+
 		projectionOperator = ProjectionScanOperator.new
 		projectionOperator.addInput tablename 
 		columns.each do |column|
-			projectionOperator.addField column
+			if column["mode"] == "select"
+				projectionOperator.addField column["column"]
+			end
 		end
-
+		puts projectionOperator.getQuery
 		return executeQuery projectionOperator.getQuery
 	end
 
@@ -65,7 +68,7 @@ class Hyrise
 			    }
 				
 			rescue Exception => e
-				return Hash.new
+				return {"error" => "Server not reachable"}
 			end
 
 		    response_body = response.body

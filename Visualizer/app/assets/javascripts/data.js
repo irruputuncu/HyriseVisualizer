@@ -43,14 +43,16 @@ $(document).ready(function () {
 
                                                             var collectFunction = function(){
                                                                 var data = {};
-                                                                data[$(this).data("mode")] = $(this).data("column");
+                                                                data["mode"] = $(this).data("mode");
+                                                                data["column"] = $(this).data("column");
                                                                 columns.push(data);
                                                             };
 
-                                                            $('#ySettings .btn').each(collectFunction);
+                                                            $('#ySettings .btn.disabled').each(collectFunction);
 
-                                                            $('#xSettings .btn').each(collectFunction);
+                                                            $('#xSettings .btn.disabled').each(collectFunction);
 
+                                                            console.log(columns)
 
                                                             $.ajax({
                                                                   url: 'getColumns?tablename=test',
@@ -59,6 +61,16 @@ $(document).ready(function () {
                                                                   dataType: "script",
                                                                   error: function(jqXHR, textStatus, errorThrown) {
                                                                         console.log(textStatus);
+                                                                  },
+                                                                  complete: function(jqXHR, textStatus ){
+                                                                        json = JSON.parse(jqXHR.responseText);
+
+                                                                        if(json.hasOwnProperty("error")){
+                                                                            alert(json["error"]);
+                                                                        }else{
+                                                                            //load the graph!
+                                                                            alert("Loading graph ...");
+                                                                        }
                                                                   }
                                                                 });
                                                         }
