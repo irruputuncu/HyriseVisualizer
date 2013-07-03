@@ -5,6 +5,7 @@ require 'operators/metadata.rb'
 require 'operators/tableload.rb'
 require 'operators/projectionscan.rb'
 require 'operators/simpletablescan.rb'
+require 'operators/groupbyscan.rb'
 
 class Hyrise
 
@@ -47,14 +48,30 @@ class Hyrise
 		projectionOperator = ProjectionScanOperator.new
 		projectionOperator.addInput tablename 
 		
+		groupOperator = GroupByScanOperator.new
+		shouldGroup = false
+
 		columns.each do |column|
-			if column["mode"] == "select"
+			if column["mode"] == "select" or column["mode"] == "group"
 				projectionOperator.addField column["column"]
+			end
+
+			if column["mode"] == "group"
+				groupOperator.addField column["column"]
+			#	groupOperator.addFunction(1,column["column"])
+				shouldGroup = true
 			end
 		end
 
-		results =  executeQuery projectionOperator.getQuery
-		puts results
+		if shouldGroup
+			projectionOperator.addEdgeTo(groupOperator)
+			query = groupOperator.getQuery
+		else
+			query = projectionOperator.getQuery
+		end
+		puts query
+		results =  executeQuery query
+		#puts results
 		output = Hash.new;
 
 		header = results["header"]
