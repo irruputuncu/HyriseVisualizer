@@ -83,6 +83,8 @@ class Hyrise
 			end
 		end
 
+		output['rows'] = results['rows']
+
 		return output
 	end
 

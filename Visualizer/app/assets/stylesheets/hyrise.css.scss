@@ -49,6 +49,15 @@ body, html {
 	height: 100%;
 	min-height: 200px;
 	margin-top: 20px;
+	max-width:400px;
+
+	background-color: rgba(81, 81, 81, 0.3);
+	border-radius:5px;
+	margin-left:auto;
+	margin-right:auto;
+	border: solid $borderColor;
+	border-style:none;
+	border-width: 2px;
 }
 
 #attributes, .axisDroppableContainer{
@@ -62,15 +71,12 @@ body, html {
 	
 }
 
-.axisDroppableContainer{
-	background-color: rgba(0, 187, 255, 0.5);
-	border-radius:5px;
-	margin-left:20px;
-	margin-right:20px;
-	border: solid $borderColor;
-	border-style:none;
-	border-width: 2px;
+#dataTableContainer{
+	width:85%;
+	float:left;
 }
+
+
 
 .hoverDroppable{
 	background-color: rgba(0, 187, 255, 0.25);

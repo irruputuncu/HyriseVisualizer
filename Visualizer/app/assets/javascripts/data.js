@@ -88,6 +88,22 @@ $(document).ready(function () {
                                 chart.addSeries({name: yAxisColumn,
                                                         data: json[yAxisColumn]
                                                         }, true);
+
+                                //load the simple data table on top of the graph
+                                $('#dataTable .dataTableRow').each(function(){
+                                    $(this).remove();
+                                });
+
+                                json['rows'].foreach(function (){
+                                    var html = '<tr class="dataTableRow">';
+
+                                    this.foreach(function (){
+                                        html = html + '<td>' + this + '</td>';
+                                    });
+
+                                    html = html + '</tr';
+                                    $('#dataTable').append(html);
+                                });
                             }
                         }
                     });
