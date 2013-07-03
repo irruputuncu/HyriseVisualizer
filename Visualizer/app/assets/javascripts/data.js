@@ -28,6 +28,7 @@ $(document).ready(function () {
     $(function(){
         $(".modeSelect").click(function(){
             $(this).parent().parent().parent().parent().attr('data-mode',$(this).attr('mode'));
+            $(this).siblings('.actionSelect').text($(this).text());
         });
     });
 
