@@ -1,10 +1,9 @@
 var chart;
-var xAxisColumn
-var yAxisColumns = Array.new
-var series = Array.new
+var loadedColumns = []; //contains column id and the data, needed?
+var loadedSeries = []; //contains the series with refernces to columns and the charts series used for altering
 
 $(document).ready(function () { 
-    // initial chart
+    // create initial chart
     chart = new Highcharts.Chart({
         chart: {
             renderTo: 'graph'
@@ -25,79 +24,139 @@ $(document).ready(function () {
     });
 });
 
+var removeSeriesWithColumn = function(columnId, axis) {
+    console.log(axis);
+    if (axis == 'x') {
+        while (chart.series.length) {
+            chart.series[0].remove();
+        }
+        loadedSeries = [];
+    } else {
+        var length = loadedSeries.length
+        for (var i = 0; i < length; i++) {
+            if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['yColumn']['axis'] == axis) {
+                chart.series[i].remove();
+                loadedSeries[i].splice(i, 1);
+            }
+        } 
+    }  
+};
+
 var reloadData = function() {
-    if ($('#ySettings .btn').length > 0 && $('#xSettings .btn').length > 0) {
-        var columns = [];
-        var table;
+
+    //collect necessary data
+    //remove old series (later check for changes)
+    //update chart (add series)
+
+    if (($('#ySettings .column').length > 0 || $('#oppositeYSettings .column').length > 0) && $('#xSettings .column').length > 0) {
+        var newSeries = [];
+        var xAxisColumn = $('#xSettings .btn.disabled');
+        var seriesCount = 0;
+        var xAxis = {
+            "mode": xAxisColumn.data("mode"),
+            "column": xAxisColumn.data("column"),
+            "type": xAxisColumn.data("type"),
+            "table": xAxisColumn.data("table")
+        };
 
         var collectFunction = function(){
             var data = {};
             data["mode"] = $(this).data("mode");
             data["column"] = $(this).data("column");
-            columns.push(data);
+            data["type"] = $(this).data("type");
+            data["table"] = $(this).data("table");
+            data["id"] = $(this).data("id");
 
-            table = $(this).data("table");
+            series = {
+                'yColumn': data,
+                'id': seriesCount,
+                'axis': 'y' //later add 'o' for the opposite y axis
+            };
+            newSeries.push(series);
+            seriesCount++;
         };
 
-        $('#ySettings .btn.disabled').each(collectFunction);
-        $('#xSettings .btn.disabled').each(collectFunction);
-
-        xAxisColumn = $('#xSettings .btn.disabled').data("column");
-        yAxisColumn = $('#ySettings .btn.disabled').data("column");
+        $('#ySettings .column').each(collectFunction);
+        $('#oppositeYSettings .column').each(collectFunction);
 
 
         $.ajax({
-            url: 'getContent?tablename='+table,
+            url: 'getContentForSeries',
             type: "POST",
-            data: {columns: columns},
+            data: {series: newSeries, xaxis: xAxis},
             dataType: "script",
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(textStatus);
             },
             complete: function(jqXHR, textStatus ){
                 json = $.parseJSON(jqXHR.responseText);
-                if(json.hasOwnProperty("error")){
+                if (json.hasOwnProperty("error")){
                     alert(json["error"]);
                 }else{
-                    //load the graph!
-                    chart.setTitle({text:table});
 
-                    chart.xAxis[0].setCategories(json[xAxisColumn], true);
-                    chart.xAxis[0].setTitle({text:xAxisColumn}, true);
-                    chart.yAxis[0].setTitle({text:yAxisColumn}, true);
+                    console.log(json)
+                    // update x-axis
+                    if (json[0].hasOwnProperty("categories")) {
+                        chart.xAxis[0].setCategories(json[xAxisColumn], true);
+                    }
+                    chart.xAxis[0].setTitle({text:xAxis['column']}, true);
 
-                    chart.addSeries({name: yAxisColumn,
-                                            data: json[yAxisColumn]
-                                            }, true);
+                    //remove old series from chart
+                    while (chart.series.length) {
+                        chart.series[0].remove();
+                    }
 
-                    //load the simple data table on top of the graph
+                    for (var i = 0; i < json.length; i++) {
+
+                        // update y-Axis with series
+                        chart.addSeries({
+                            name: json[i]['name'],
+                            data: json[i]['data']
+                        }, true);
+                    }
+
+                    // load the simple data table on bottom of page
+
                     $('#dataTable').children().each(function(){
                         $(this).remove();
                     });
-                    console.log(Object.keys(json).constructor);
-                    var keys = Object.keys(json);
-                    var headers = '<tr>';
 
-                    $.each(keys,function(index,val){
+                    var headers = '<tr>'
+                    headers += '<th>' + xAxis['column'] + '</th>';
+                    $.each(json, function(index,val) {
                         if(val != 'rows')
-                            headers = headers + '<th>'+val+'</th>';
-                    })
+                            headers = headers + '<th>' + val['name'] + '</th>';
+                    });
+                    headers += '</tr>';
 
-                    headers = headers + '</tr>';
                     $('#dataTable').append(headers);
 
-                    for(var i = 0; i < json['rows'].length; i++){
+                    for(var i = 0; i < json[0]['data'].length; i++) {
                         var html = '<tr class="dataTableRow">';
 
-                        for(var j = 0; j < json['rows'][i].length; j++){
-                            html = html + '<td>' + json['rows'][i][j] + '</td>';
+                        if (json[0].hasOwnProperty("categories")) {
+                            html += '<td>' + json[0]['categories'][i] + '</td>'; 
+
+                            $.each(json, function(index,val) {
+                                if(val != 'rows')
+                                    html += '<td>' + val['data'][i] + '</td>';
+                            });
+                        } else {
+                            html += '<td>' + json[0]['data'][i][0] + '</td>';
+
+                            $.each(json, function(index,val) {
+                                if(val != 'rows')
+                                    html += '<td>' + val['data'][i][1] + '</td>';
+                            });
                         }
 
-                        html = html + '</tr>';
+                        html += '</tr>';
                         $('#dataTable').append(html);
                     }
 
-                }
+                    // save created series in global variable
+                    loadedSeries = newSeries;
+                }   
             }
         });
     }

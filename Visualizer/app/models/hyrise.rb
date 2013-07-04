@@ -43,8 +43,62 @@ class Hyrise
 		return executeQuery metaOperator.getQuery
 	end
 
-	def getContentOfColumns(tablename, columns)
+	def getContentForSeries(series, xaxis)
+
+		content = Array.new
+		series.each do | index, serie |
+			finalResult = Hash.new
+			column = serie['yColumn']
+			tablename = column["table"]
+			projectionOperator = ProjectionScanOperator.new
+
+			projectionOperator.addInput tablename 
+			projectionOperator.addField xaxis["column"] # so this column will be the first in result
+			projectionOperator.addField column["column"]
+
+			case column["mode"] 
+				when "count"
+					groupOperator = GroupByScanOperator.new
+					hashBuildOperator = HashBuildOperator.new
+
+					groupOperator.addField xaxis["column"]
+					groupOperator.addFunction(1, xaxis["column"])
+					hashBuildOperator.addField xaxis["column"]
+
+					projectionOperator.addEdgeTo(hashBuildOperator)
+					projectionOperator.addEdgeTo(groupOperator)
+					hashBuildOperator.addEdgeTo(groupOperator)
+
+					result = executeQuery groupOperator.getQuery
+				else
+					result = executeQuery projectionOperator.getQuery
+			end
+
+			unless result['rows'].nil?
+				if xaxis['type'].to_i < 2
+					result['rows'].each do | row |
+						(finalResult['data'] ||= []) << [row.first, row.second]
+					end
+				else
+					categories = []
+					result['rows'].each do | row |
+						categories << row.first
+						(finalResult['data'] ||= []) << row.second
+					end
+					finalResult['categories'] = categories.uniq
+				end
+				finalResult['name'] = result['header'].second
+			end
+
+			content.push finalResult 
+		end
+
+		return content
+	end
+
+	def getContentOfColumns(columns)
 		columns = columns.values.sort_by { |v| v["mode"]}
+		tablename = columns.first["table"]
 
 		projectionOperator = ProjectionScanOperator.new
 		projectionOperator.addInput tablename 
@@ -75,8 +129,10 @@ class Hyrise
 			query = projectionOperator.getQuery
 		end
 		puts query
-		results =  executeQuery query
+		
+		results = executeQuery query
 		#puts results
+		
 		output = Hash.new;
 
 		output['rows'] = results['rows']

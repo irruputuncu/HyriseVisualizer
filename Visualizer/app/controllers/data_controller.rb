@@ -11,8 +11,12 @@ class DataController < ApplicationController
 	end
 
 	def get_content
-		results = @data.getContentOfColumns(params[:tablename], params[:columns]) unless params[:tablename].blank? || params[:columns].blank?
+		results = @data.getContentOfColumns(params[:columns]) unless params[:columns].blank?
+		render json: results
+	end
 
+	def get_content_for_series
+		results = @data.getContentForSeries(params[:series], params[:xaxis]) unless params[:series].blank? || params[:xaxis].blank?
 		render json: results
 	end
 
