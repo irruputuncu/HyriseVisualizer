@@ -3,7 +3,6 @@ class HashBuildOperator < Operator
 	def initialize
 		super
 		@fields = Array.new
-		@functions = Array.new
 		initializeWithType("HashBuild")
 	end
 
@@ -12,7 +11,7 @@ class HashBuildOperator < Operator
 	end
 
 	def as_json(*a)
-		{"type" => @type, "fields" => @fields, "functions" => @functions}
+		{"type" => @type, "fields" => @fields}
 	end
 
 end

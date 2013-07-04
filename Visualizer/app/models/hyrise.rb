@@ -73,7 +73,7 @@ class Hyrise
 		else
 			query = projectionOperator.getQuery
 		end
-		#puts query
+		puts query
 		results =  executeQuery query
 		#puts results
 		output = Hash.new;
