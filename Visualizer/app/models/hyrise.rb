@@ -26,7 +26,7 @@ class Hyrise
 		tables = Hash.new
 		result = executeQuery metaOperator.getQuery
 		
-		if !result['rows'].nil?
+		unless result['rows'].nil?
 			result['rows'].each do | row |
 				(tables[row.first] ||= []) << row.second
 			end
@@ -79,22 +79,24 @@ class Hyrise
 		output = Hash.new;
 
 		output['rows'] = results['rows']
-
 		header = results["header"]
-		header.each do | column |
-			index = header.index(column)
-			output[column] = Array.new
-			results['rows'].each do | row |
-				output[column].push row[index]
+
+		unless header.nil?
+			header.each do | column |
+				index = header.index(column)
+				output[column] = Array.new
+				results['rows'].each do | row |
+					output[column].push row[index]
+				end
 			end
 		end
-
 		
 		#puts output['rows']
 		return output
 	end
 
 	protected
+
 		def executeQuery(query, url = HYRISE_DEFAULT_URL)
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})
