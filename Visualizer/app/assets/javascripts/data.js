@@ -102,7 +102,6 @@ $(document).ready(function () {
                                 })
 
                                 headers = headers + '</tr>';
-
                                 $('#dataTable').append(headers);
 
                                 for(var i = 0; i < json['rows'].length; i++){

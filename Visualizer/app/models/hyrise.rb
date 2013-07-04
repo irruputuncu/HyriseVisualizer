@@ -6,6 +6,7 @@ require 'operators/tableload.rb'
 require 'operators/projectionscan.rb'
 require 'operators/simpletablescan.rb'
 require 'operators/groupbyscan.rb'
+require 'operators/hashbuild.rb'
 
 class Hyrise
 
@@ -49,11 +50,13 @@ class Hyrise
 		projectionOperator.addInput tablename 
 		
 		groupOperator = GroupByScanOperator.new
+		hashBuildOperator = HashBuildOperator.new
 		shouldGroup = false
 
 		columns.each do |column|
 			if column["mode"] == "select" or column["mode"] == "group"
 				projectionOperator.addField column["column"]
+				hashBuildOperator.addField column["column"]
 			end
 
 			if column["mode"] == "group"
@@ -64,7 +67,8 @@ class Hyrise
 		end
 
 		if shouldGroup
-			projectionOperator.addEdgeTo(groupOperator)
+			projectionOperator.addEdgeTo(hashBuildOperator)
+			hashBuildOperator.addEdgeTo(groupOperator)
 			query = groupOperator.getQuery
 		else
 			query = projectionOperator.getQuery
