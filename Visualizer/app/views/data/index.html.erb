@@ -29,7 +29,7 @@
 
 				<ul class="dropdown-menu">
 					<li>
-	    				<a class="modeSelect" mode="select">Select</a>
+	    				<a class="modeSelect" mode="select">None</a>
 	    			</li>
 	    			<li>
 	    				<a class="modeSelect" mode="group">Group</a>
@@ -68,20 +68,24 @@
 		<div class="btn disabled">Name</div>
 		<div class="btn disabled">Manager</div>
 
+		<% index = 0 %>
 		<% @scheme.each_pair do | table, columns| %>
-			<div class="subHeading"> <%= table %> </div>
+			<div class="subHeading"> <%= table %></div>
 			<% columns.each do | column | %>
-				<div class="btn disabled column" data-column="<%= column %>" data-table="<%= table %>" data-mode="select"> <%= column %> 
+				<div class="btn disabled column" data-column="<%= column[:name] %>" data-table="<%= table %>" data-mode="select" data-type="<%= column[:type] %>" data-id="<%= index %>"> 	
+					<button type="button" class="close removeColumn">×</button>
+					<%= column[:name] %> 
 					<div class="btn-group" style="float:right;">
-				<button class="btn btn-mini dropdown-toggle actionSelect"  data-toggle="dropdown">Action<span class="caret"></span></button>
+						<button class="btn btn-mini dropdown-toggle actionSelect"  data-toggle="dropdown">Action<span class="caret"></span></button>
 
-				<ul class="dropdown-menu">
-					<li><a class="modeSelect" mode="select">Select</a></li>
-	    			<li><a class="modeSelect" mode="group">Group</a></li>
-	    			<li><a class="modeSelect" mode="order">Order by</a></li>
-	  			</ul>
-			</div>
+						<ul class="dropdown-menu">
+							<li><a class="modeSelect" mode="select">None</a></li>
+			    			<li><a class="modeSelect" mode="group">Group</a></li>
+			    			<li><a class="modeSelect" mode="order">Order by</a></li>
+			  			</ul>
+					</div>
 				</div>
+				<% index += 1 %>
 			<% end %>
 		<% end %>
 	</div>
@@ -109,7 +113,7 @@
 	</div>
 	<div id="xSettings">
 		<h3> x-Axis </h3>
-		<div class="axisDroppableContainer">
+		<div class="axisDroppableContainer xAxis">
 			Drop a column here
 		</div>
 	</div>

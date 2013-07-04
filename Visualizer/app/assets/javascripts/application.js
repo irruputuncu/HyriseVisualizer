@@ -14,5 +14,6 @@
 //= require jquery_ujs
 //= require highcharts/highcharts.js
 //= require data.js
+//= require ui.js
 //= require jquery.ui.all
 //= require bootstrap

@@ -28,7 +28,7 @@ class Hyrise
 		
 		unless result['rows'].nil?
 			result['rows'].each do | row |
-				(tables[row.first] ||= []) << row.second
+				(tables[row.first] ||= []) << { name: row.second, type: row.third }
 			end
 		end
 

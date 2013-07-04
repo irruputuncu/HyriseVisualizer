@@ -42,8 +42,7 @@ body, html {
 		line-height: 20px;
 		color: #999999;
 	}
-
-	.actionSelect {
+	.actionSelect, .removeColumn {
 		display: none;
 	}
 }
@@ -69,9 +68,7 @@ body, html {
 		margin: 3px;
 		opacity: 1;
 		cursor: pointer;
-	}
-
-	
+	}	
 }
 
 #dataTableContainer{
@@ -79,8 +76,6 @@ body, html {
 	float:left;
 	border-top: $borderWidth solid $borderColor;
 }
-
-
 
 .hoverDroppable{
 	background-color: rgba(0, 187, 255, 0.25);
@@ -113,4 +108,8 @@ body, html {
 	width: 55%;
 	min-height: 100px;
 	border-top: $borderWidth solid $borderColor;
+}
+
+.removeColumn {
+	float: left;
 }
