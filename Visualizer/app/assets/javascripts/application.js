@@ -16,4 +16,4 @@
 //= require data.js
 //= require ui.js
 //= require jquery.ui.all
-//= require bootstrap
+//= require bootstrap/bootstrap

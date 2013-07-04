@@ -42,7 +42,7 @@ body, html {
 		line-height: 20px;
 		color: #999999;
 	}
-	.actionSelect, .removeColumn {
+	.actionSelect, .removeColumn, .popoverToggle {
 		display: none;
 	}
 }
@@ -112,4 +112,37 @@ body, html {
 
 .removeColumn {
 	float: left;
+}
+
+.popoverToggle {
+	float: right;
+	padding: 2px 4px;
+}
+.popoverContent {
+	display: none;
+}
+.form-horizontal {
+	clear: both;
+	padding: 10px;
+	margin: 0px;
+
+	.controls {
+		margin-left: 90px !important;
+	}
+
+	select {
+		width: 150px;
+	}
+	.control-label {
+		width: 80px;
+	}
+}
+.popover.right {
+	background-color: black;
+	border-radius: 5px;
+	padding: 2px;
+
+	.arrow {
+		left: -5px;
+	}
 }

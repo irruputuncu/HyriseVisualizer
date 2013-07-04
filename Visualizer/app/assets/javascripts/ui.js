@@ -1,12 +1,5 @@
 $(document).ready(function () { 
 
-    $(document).on("click", ".modeSelect", function() {
-        console.log('selected');
-        $(this).parents('.column').attr('data-mode',$(this).attr('mode'));
-        $(this).parent().parent().siblings('.actionSelect').html($(this).text()+'<span class="caret">');
-        reloadData();
-    });
-
     $(".axisDroppableContainer").droppable({
         over: function(event, ui){
             $(this).addClass("hoverDroppable");
@@ -24,7 +17,6 @@ $(document).ready(function () {
                 }
                 if (($(ui.draggable).data("type") < 2 && $(this).children('[data-id="2"]').length == 0) || ($(ui.draggable).data("type") == 2 && $(this).children('[data-id="1"]').length == 0 && $(this).children('[data-id="0"]').length == 0)) {  
                     $(this).append($(ui.draggable).clone());
-
                     reloadData();
                 } else {
                     alert('You can only add columns of either number or string type at the same time');
@@ -39,6 +31,26 @@ $(document).ready(function () {
         $(this).parent().remove();
     });
 
+    $(document).on("click", ".modeSelect", function() {
+        console.log('selected');
+        $(this).parents('.column').attr('data-mode',$(this).attr('mode'));
+        $(this).parent().parent().siblings('.actionSelect').html($(this).text()+'<span class="caret">');
+        reloadData();
+    });
+
+    $(document).popover({
+        selector: '[rel=popover]',
+        html: true,
+        placement: 'right',
+        title: 'Options',
+        content: function() { return $(this).next().html();}
+    });
+
+    // $(document).on("click", "[rel=popover]", function(e) {
+    //     e.preventDefault();
+    //     $(this).popover('show');
+    // });
+
     $("#attributes > .btn").draggable({ 
         helper: 'clone'
     });
@@ -50,6 +62,5 @@ $(document).ready(function () {
             }
         }
     });
-
 });
 
