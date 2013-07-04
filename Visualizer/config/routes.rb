@@ -4,7 +4,7 @@ Visualizer::Application.routes.draw do
 
   match '/loadTable' => 'data#load_table'
 
-  post '/getColumns' => 'data#get_columns'
+  post '/getContent' => 'data#get_content'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -10,7 +10,7 @@ class DataController < ApplicationController
 		redirect_to root_url
 	end
 
-	def get_columns
+	def get_content
 		results = @data.getContentOfColumns(params[:tablename], params[:columns]) unless params[:tablename].blank? || params[:columns].blank?
 
 		render json: results

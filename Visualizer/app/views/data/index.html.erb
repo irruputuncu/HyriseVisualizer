@@ -76,15 +76,9 @@
 				<button class="btn btn-mini dropdown-toggle actionSelect"  data-toggle="dropdown">Action<span class="caret"></span></button>
 
 				<ul class="dropdown-menu">
-					<li>
-	    				<a class="modeSelect" mode="select">Select</a>
-	    			</li>
-	    			<li>
-	    				<a class="modeSelect" mode="group">Group</a>
-	    			</li>
-	    			<li>
-	    				<a class="modeSelect" mode="order">Order by</a>
-	    			</li>
+					<li><a class="modeSelect" mode="select">Select</a></li>
+	    			<li><a class="modeSelect" mode="group">Group</a></li>
+	    			<li><a class="modeSelect" mode="order">Order by</a></li>
 	  			</ul>
 			</div>
 				</div>
@@ -92,26 +86,14 @@
 		<% end %>
 	</div>
 	
-	<div id="dataTableContainer">
-		<table width="100%" class="table table-striped table-bordered" id="dataTable">
-			<tr>
-				<th>Test1</th>
-				<th>Test2</th>
-			</tr>
-				
-			<tr class="dataTableRow">
-				<td>val11</td>
-				<td>val12</td>
-			</tr>
-
-			<tr class="dataTableRow">
-				<td>val21</td>
-				<td>val22</td>
-			</tr>
-		</table>
+	<div id="graphOptions">
+		<button type="button" class="btn graphTypeButton" data-type="line">Line</button>
+		<button type="button" class="btn graphTypeButton" data-type="bar">Bar</button>
+		<button type="button" class="btn graphTypeButton" data-type="spline">Spline</button>
+		<button type="button" class="btn graphTypeButton" data-type="area">Area</button>
+		<button type="button" class="btn graphTypeButton" data-type="scatter">Scatter</button>
+		<button type="button" class="btn graphTypeButton" data-type="pie">Pie</button>
 	</div>
-	
-	<div id="graphOptions"></div>
 	<div id="ySettings">
 		<h3> y-Axis </h3>
 		<div class="axisDroppableContainer">
@@ -130,6 +112,26 @@
 		<div class="axisDroppableContainer">
 			Drop a column here
 		</div>
+	</div>
+
+	<div id="dataTableContainer">
+		<h3> Retrieved Data </h3>
+		<table width="100%" class="table table-striped table-bordered" id="dataTable">
+			<tr>
+				<th>Test1</th>
+				<th>Test2</th>
+			</tr>
+				
+			<tr class="dataTableRow">
+				<td>val11</td>
+				<td>val12</td>
+			</tr>
+
+			<tr class="dataTableRow">
+				<td>val21</td>
+				<td>val22</td>
+			</tr>
+		</table>
 	</div>
 	
 </div>
