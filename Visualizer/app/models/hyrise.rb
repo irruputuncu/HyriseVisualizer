@@ -56,18 +56,19 @@ class Hyrise
 		columns.each do |column|
 			if column["mode"] == "select" or column["mode"] == "group"
 				projectionOperator.addField column["column"]
-				hashBuildOperator.addField column["column"]
 			end
 
 			if column["mode"] == "group"
 				groupOperator.addField column["column"]
-			#	groupOperator.addFunction(1,column["column"])
+				groupOperator.addFunction(1, column["column"])
+				hashBuildOperator.addField column["column"]
 				shouldGroup = true
 			end
 		end
 
 		if shouldGroup
 			projectionOperator.addEdgeTo(hashBuildOperator)
+			projectionOperator.addEdgeTo(groupOperator)
 			hashBuildOperator.addEdgeTo(groupOperator)
 			query = groupOperator.getQuery
 		else
