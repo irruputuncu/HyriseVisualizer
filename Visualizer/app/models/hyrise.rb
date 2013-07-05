@@ -56,22 +56,32 @@ class Hyrise
 			projectionOperator.addField xaxis["column"] # so this column will be the first in result
 			projectionOperator.addField column["column"]
 
-			case column["mode"] 
-				when "count"
-					groupOperator = GroupByScanOperator.new
-					hashBuildOperator = HashBuildOperator.new
+			if column["aggregation"] != 'none'
+				groupOperator = GroupByScanOperator.new
+				hashBuildOperator = HashBuildOperator.new
 
-					groupOperator.addField xaxis["column"]
-					groupOperator.addFunction(1, xaxis["column"])
-					hashBuildOperator.addField xaxis["column"]
+				hashBuildOperator.addField xaxis["column"]
 
-					projectionOperator.addEdgeTo(hashBuildOperator)
-					projectionOperator.addEdgeTo(groupOperator)
-					hashBuildOperator.addEdgeTo(groupOperator)
+				groupOperator.addField xaxis["column"]
 
-					result = executeQuery groupOperator.getQuery
-				else
-					result = executeQuery projectionOperator.getQuery
+				case column["aggregation"]
+					when 'count'
+						groupOperator.addFunction(1, xaxis["column"])
+					when 'average'
+						groupOperator.addFunction(2, xaxis["column"])
+					when 'sum'
+						groupOperator.addFunction(0, xaxis["column"])
+					else
+						groupOperator.addFunction(1, xaxis["column"])
+				end
+
+				projectionOperator.addEdgeTo(hashBuildOperator)
+				projectionOperator.addEdgeTo(groupOperator)
+				hashBuildOperator.addEdgeTo(groupOperator)
+
+				result = executeQuery groupOperator.getQuery
+			else
+				result = executeQuery projectionOperator.getQuery
 			end
 
 			unless result['rows'].nil?
@@ -88,6 +98,7 @@ class Hyrise
 					finalResult['categories'] = categories.uniq
 				end
 				finalResult['name'] = result['header'].second
+				finalResult['name'][xaxis['column']] = column['column'] if finalResult['name'].include? xaxis["column"]  #replace names like COUNT(xaxis) with COUNT(yaxis)
 			end
 
 			content.push finalResult 

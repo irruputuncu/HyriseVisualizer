@@ -24,6 +24,14 @@ $(document).ready(function () {
     });
 });
 
+var changeChartType = function(columnId, type, axis) {
+    for (var i = 0; i < loadedSeries.length; i++) {
+        if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['yColumn']['axis'] == axis) {
+            chart.series[i].update({type: type});
+        }
+    }
+}
+
 var removeSeriesWithColumn = function(columnId, axis) {
     console.log(axis);
     if (axis == 'x') {
@@ -32,13 +40,16 @@ var removeSeriesWithColumn = function(columnId, axis) {
         }
         loadedSeries = [];
     } else {
-        var length = loadedSeries.length
-        for (var i = 0; i < length; i++) {
+        var indicesToRemove = [];
+        for (var i = 0; i < loadedSeries.length; i++) {
             if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['yColumn']['axis'] == axis) {
-                chart.series[i].remove();
-                loadedSeries[i].splice(i, 1);
+                indicesToRemove.push(i);
             }
-        } 
+        }
+        for (var i = 0; i < indicesToRemove.length; i++) {
+            chart.series[i].remove();
+            loadedSeries[i].splice(i, 1);
+        }
     }  
 };
 
@@ -61,7 +72,7 @@ var reloadData = function() {
 
         var collectFunction = function(){
             var data = {};
-            data["mode"] = $(this).data("mode");
+            data["aggregation"] = $(this).data("aggregation");
             data["column"] = $(this).data("column");
             data["type"] = $(this).data("type");
             data["table"] = $(this).data("table");

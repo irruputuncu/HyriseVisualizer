@@ -1,5 +1,6 @@
 $(document).ready(function () { 
 
+    //define dropzone for the attributes
     $(".axisDroppableContainer").droppable({
         over: function(event, ui){
             $(this).addClass("hoverDroppable");
@@ -26,18 +27,37 @@ $(document).ready(function () {
         }
     });
 
+    //make attributes draggable and clone them
+    $("#attributes > .btn").draggable({ 
+        helper: 'clone'
+    });
+    
+    //remove a column when x is clicked
     $(document).on("click", ".axisDroppableContainer .removeColumn", function() {
         removeSeriesWithColumn($(this).data('id'), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
         $(this).parent().remove();
     });
 
+
+    // mode selest --> soon deprecated (after aggregation select is used)
     $(document).on("click", ".modeSelect", function() {
-        console.log('selected');
         $(this).parents('.column').attr('data-mode',$(this).attr('mode'));
         $(this).parent().parent().siblings('.actionSelect').html($(this).text()+'<span class="caret">');
         reloadData();
     });
 
+    //aggregation select
+    $(document).on("change", ".aggregationSelect", function() {
+        $(this).parents('.column').attr('data-aggregation', $(this).val());
+        reloadData();
+    });
+
+    //change series chart type
+    $(document).on("change", ".chartTypeSelect", function() {
+        changeChartType($(this).parents('.column').data('id'), $(this).val(), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
+    });
+
+    // initilaize the options popover
     $(document).popover({
         selector: '[rel=popover]',
         html: true,
@@ -46,15 +66,16 @@ $(document).ready(function () {
         content: function() { return $(this).next().html();}
     });
 
-    // $(document).on("click", "[rel=popover]", function(e) {
-    //     e.preventDefault();
-    //     $(this).popover('show');
-    // });
-
-    $("#attributes > .btn").draggable({ 
-        helper: 'clone'
+    //close the popover on click on the background
+    $('body, html, svg').on('click', function (e) {
+        $('.popoverToggle').each(function () {
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+                $(this).popover('hide');
+            }
+        });
     });
 
+    //buttons for the graphselection
     $(".graphTypeButton").click( function() {
         if (chart.series) {
             for(var i = 0; i < chart.series.length; i++) {

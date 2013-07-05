@@ -23,37 +23,26 @@
 	<div id="attributes">
 		<h3> Attributes </h3>
 		<div class="subHeading" > Employees </div>
-		<div class="btn disabled column" data-column="id" data-mode="select" data-type="1">Id
+		<div class="btn disabled column" data-column="id" data-aggregation="none" data-type="1" data-id="0">Id
 
 			<span class="btn btn-small popoverToggle" rel="popover" data-toggle="popover"><i class="icon-cog"></i></span>
   			<div class="popoverContent">
   				<form class="form-horizontal">
-	  				<div class="control-group">
-						<label class="control-label" for="inputEmail">Action:</label>
-						<div class="controls">
-							<select class="actionSelect">
-								<option value="select">Select</option>
-								<option value="group">Group</option>
-								<option value="order">Order</option>
-							</select>
-						</div>
-					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputEmail">Aggregation:</label>
+						<label class="control-label" for="aggregationSelect">Aggregation:</label>
 						<div class="controls">
 							<select class="aggregationSelect">
 								<option value="none">None</option>
 								<option value="count">Count</option>
-								<option value="select">Average</option>
-								<option value="group">Sum</option>
-								<option value="order">Order</option>
+								<option value="average">Average</option>
+								<option value="sum">Sum</option>
 							</select>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="inputEmail">Type:</label>
+						<label class="control-label" for="chartTypeSelect">Type:</label>
 						<div class="controls">
-							<select>
+							<select class="chartTypeSelect">
 							    <optgroup label="Line">
 							        <option>Line</option>
 							        <option>Spline</option>
@@ -113,17 +102,46 @@
 				<div class="btn disabled column" data-column="<%= column[:name] %>" data-table="<%= table %>" data-mode="select" data-type="<%= column[:type] %>" data-id="<%= index %>"> 	
 					<button type="button" class="close removeColumn">×</button>
 					<%= column[:name] %> 
-					<div class="btn-group" style="float:right;">
-						<button class="btn btn-mini dropdown-toggle actionSelect"  data-toggle="dropdown">Action<span class="caret"></span></button>
-
-						<ul class="dropdown-menu">
-							<li><a class="modeSelect" mode="select">None</a></li>
-			    			<li><a class="modeSelect" mode="group">Group</a></li>
-			    			<li><a class="modeSelect" mode="order">Order by</a></li>
-			    			<li><a class="modeSelect" mode="count">Count</a></li>
-			    			<li><a class="modeSelect" mode="average">Average</a></li>
-			    			<li><a class="modeSelect" mode="sum">Sum</a></li>
-			  			</ul>
+					<span class="btn btn-small popoverToggle" rel="popover" data-toggle="popover"><i class="icon-cog"></i></span>
+		  			<div class="popoverContent">
+		  				<form class="form-horizontal">
+							<div class="control-group">
+								<label class="control-label" for="aggregationSelect">Aggregation:</label>
+								<div class="controls">
+									<select class="aggregationSelect">
+										<option value="none">None</option>
+										<option value="count">Count</option>
+										<option value="average">Average</option>
+										<option value="sum">Sum</option>
+									</select>
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="chartTypeSelect">Type:</label>
+								<div class="controls">
+									<select class="chartTypeSelect">
+									    <optgroup label="Line">
+									        <option>Line</option>
+									        <option>Spline</option>
+									    </optgroup>
+									    <optgroup label="Bar">
+									        <option>Bar</option>
+									        <option>Column</option>
+									    </optgroup>
+									    <optgroup label="Area">
+									        <option>Area</option>
+									        <option>Areaspline</option>
+									    </optgroup>
+									    <optgroup label="Scatter">
+									        <option>Scatter</option>
+									    </optgroup>
+									    <optgroup label="Pie">
+									        <option>Pie</option>
+									    </optgroup>
+									</select>
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
 				<% index += 1 %>
