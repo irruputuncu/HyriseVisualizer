@@ -34,10 +34,9 @@ $(document).ready(function () {
     
     //remove a column when x is clicked
     $(document).on("click", ".axisDroppableContainer .removeColumn", function() {
-        removeSeriesWithColumn($(this).data('id'), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
+        removeSeriesWithColumn($(this).parent().data('id'), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
         $(this).parent().remove();
     });
-
 
     // mode selest --> soon deprecated (after aggregation select is used)
     $(document).on("click", ".modeSelect", function() {
@@ -47,14 +46,24 @@ $(document).ready(function () {
     });
 
     //aggregation select
-    $(document).on("change", ".aggregationSelect", function() {
-        $(this).parents('.column').attr('data-aggregation', $(this).val());
+    $(document).on("click", ".aggrSelect", function() {
+        $(this).parents('.column').attr('data-aggregation',$(this).attr('value'));
+        $(this).parent().parent().siblings('.aggrSelectToggle').html($(this).text()+' <span class="caret">');
+        $(this).parents('.popover').siblings('.popoverContent').find('.aggrSelectToggle').html($(this).text()+' <span class="caret">');
         reloadData();
     });
 
     //change series chart type
-    $(document).on("change", ".chartTypeSelect", function() {
-        changeChartType($(this).parents('.column').data('id'), $(this).val(), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
+    // $(document).on("change", ".chartTypeSelect", function() {
+    //     $(this).parents('.column').attr('data-chartType', $(this).val());
+    //     $(this).parents('.popover').siblings('.popoverContent').find('.chartTypeSelect option[value="'+$(this).val()+'"]').attr('selected', true);
+    //     changeChartType($(this).parents('.column').data('id'), $(this).val(), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
+    // });
+    $(document).on("click", ".typeSelect", function() {
+        $(this).parents('.column').attr('data-chartType',$(this).attr('value'));
+        $(this).parent().parent().siblings('.typeSelectToggle').html($(this).text()+' <span class="caret">');
+        $(this).parents('.popover').siblings('.popoverContent').find('.typeSelectToggle').html($(this).text()+' <span class="caret">');
+        changeChartType($(this).parents('.column').data('id'), $(this).attr('value'), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
     });
 
     // initilaize the options popover
@@ -67,10 +76,11 @@ $(document).ready(function () {
     });
 
     //close the popover on click on the background
-    $('body, html, svg').on('click', function (e) {
+    $(':not(#anything)').on('click', function (e) {
         $('.popoverToggle').each(function () {
             if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
                 $(this).popover('hide');
+                return;
             }
         });
     });
@@ -84,4 +94,3 @@ $(document).ready(function () {
         }
     });
 });
-

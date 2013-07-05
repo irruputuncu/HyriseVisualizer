@@ -24,16 +24,19 @@ $(document).ready(function () {
     });
 });
 
-var changeChartType = function(columnId, type, axis) {
+var changeChartType = function(columnId, chartType, axis) {
     for (var i = 0; i < loadedSeries.length; i++) {
-        if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['yColumn']['axis'] == axis) {
-            chart.series[i].update({type: type});
+        if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['axis'] == axis) {
+            console.log(i);
+            console.log(chartType);
+            chart.series[i].update({type: chartType});
         }
     }
 }
 
 var removeSeriesWithColumn = function(columnId, axis) {
     console.log(axis);
+    console.log(columnId);
     if (axis == 'x') {
         while (chart.series.length) {
             chart.series[0].remove();
@@ -42,13 +45,13 @@ var removeSeriesWithColumn = function(columnId, axis) {
     } else {
         var indicesToRemove = [];
         for (var i = 0; i < loadedSeries.length; i++) {
-            if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['yColumn']['axis'] == axis) {
+            if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['axis'] == axis) {
                 indicesToRemove.push(i);
             }
         }
         for (var i = 0; i < indicesToRemove.length; i++) {
             chart.series[i].remove();
-            loadedSeries[i].splice(i, 1);
+            loadedSeries.splice(i, 1);
         }
     }  
 };
@@ -71,17 +74,19 @@ var reloadData = function() {
         };
 
         var collectFunction = function(){
-            var data = {};
-            data["aggregation"] = $(this).data("aggregation");
-            data["column"] = $(this).data("column");
-            data["type"] = $(this).data("type");
-            data["table"] = $(this).data("table");
-            data["id"] = $(this).data("id");
+
+            var data = {
+                aggregation: $(this).attr("data-aggregation"), // to avoid jquery caching
+                column: $(this).data("column"),
+                type: $(this).data("type"),
+                table: $(this).data("table"),
+                id: $(this).data("id")
+            };
 
             series = {
                 'yColumn': data,
                 'id': seriesCount,
-                'axis': 'y' //later add 'o' for the opposite y axis
+                'axis': $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1)
             };
             newSeries.push(series);
             seriesCount++;
@@ -89,7 +94,6 @@ var reloadData = function() {
 
         $('#ySettings .column').each(collectFunction);
         $('#oppositeYSettings .column').each(collectFunction);
-
 
         $.ajax({
             url: 'getContentForSeries',
@@ -108,7 +112,7 @@ var reloadData = function() {
                     console.log(json)
                     // update x-axis
                     if (json[0].hasOwnProperty("categories")) {
-                        chart.xAxis[0].setCategories(json[xAxisColumn], true);
+                        chart.xAxis[0].setCategories(json[0]['categories'], true);
                     }
                     chart.xAxis[0].setTitle({text:xAxis['column']}, true);
 
@@ -124,6 +128,8 @@ var reloadData = function() {
                             name: json[i]['name'],
                             data: json[i]['data']
                         }, true);
+                        //preserve chart type after reload
+                        chart.series[chart.series.length-1].update({type:  $('.axisDroppableContainer [data-id="'+json[i]['id']+'"]').attr('data-chartType')});
                     }
 
                     // load the simple data table on bottom of page
