@@ -87,8 +87,8 @@ var reloadData = function() {
                 type: $(this).data("type"),
                 table: $(this).data("table"),
                 id: $(this).data("id"),
-                min: $(this).data("lower-value"),
-                max: $(this).data("higher-value")
+                min: $(this).attr("data-lower-value"),
+                max: $(this).attr("data-higher-value")
             };
 
             series = {

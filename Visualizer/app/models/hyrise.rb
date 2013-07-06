@@ -81,12 +81,15 @@ class Hyrise
 
 				simpletablescanOperator.addInput tablename
 
+				simpletablescanOperator.addPredicate(SCAN_TYPE::AND)
 				if not column['max'].nil?
-					simpletablescanOperator.addPredicate(SCAN_TYPE::AND)
+					simpletablescanOperator.addPredicate(SCAN_TYPE::OR)
 					simpletablescanOperator.addPredicate(SCAN_TYPE::LT,0,column['column'], column['type'].to_i,column['max'].to_i)
+					simpletablescanOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['max'].to_i)
 				end
 
 				simpletablescanOperator.addPredicate(SCAN_TYPE::GT,0,column['column'], column['type'].to_i,column['min'].to_i)
+				simpletablescanOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['min'].to_i)
 
 				simpletablescanOperator.addEdgeTo projectionOperator
 			else
@@ -118,6 +121,7 @@ class Hyrise
 
 				result = executeQuery groupOperator.getQuery
 			else
+				puts projectionOperator.getQuery
 				result = executeQuery projectionOperator.getQuery
 			end
 

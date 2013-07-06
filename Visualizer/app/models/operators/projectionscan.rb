@@ -16,7 +16,10 @@ class ProjectionScanOperator < Operator
 	end
 
 	def as_json(*a)
-		{"type" => @type, "fields" => @fields, "input" => @inputs}
+		json = {"type" => @type, "fields" => @fields}
+		json['input'] = @inputs unless @inputs.empty?
+
+		return json
 	end
 
 end
