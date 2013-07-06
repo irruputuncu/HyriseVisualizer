@@ -31,6 +31,11 @@ $(document).ready(function () {
     $("#attributes > .btn").draggable({ 
         helper: 'clone'
     });
+
+    //jquery UI Slider setup
+    $(function() {
+        $( ".valueRangeSlider" ).slider({min: 0, max:1000, value:500, step:1});
+    });
     
     //remove a column when x is clicked
     $(document).on("click", ".axisDroppableContainer .removeColumn", function() {
