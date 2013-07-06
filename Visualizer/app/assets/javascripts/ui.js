@@ -18,6 +18,7 @@ $(document).ready(function () {
                 }
                 if (($(ui.draggable).data("type") < 2 && $(this).children('[data-id="2"]').length == 0) || ($(ui.draggable).data("type") == 2 && $(this).children('[data-id="1"]').length == 0 && $(this).children('[data-id="0"]').length == 0)) {  
                     $(this).append($(ui.draggable).clone());
+                    $('.valueRangeSlider').slider({min: 0, max: 100, step:1});
                     reloadData();
                 } else {
                     alert('You can only add columns of either number or string type at the same time');
@@ -30,11 +31,6 @@ $(document).ready(function () {
     //make attributes draggable and clone them
     $("#attributes > .btn").draggable({ 
         helper: 'clone'
-    });
-
-    //jquery UI Slider setup
-    $(function() {
-        $( ".valueRangeSlider" ).slider({min: 0, max:1000, value:500, step:1});
     });
     
     //remove a column when x is clicked
