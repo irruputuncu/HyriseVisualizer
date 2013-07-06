@@ -18,18 +18,6 @@ $(document).ready(function () {
                 }
                 if (($(ui.draggable).data("type") < 2 && $(this).children('[data-id="2"]').length == 0) || ($(ui.draggable).data("type") == 2 && $(this).children('[data-id="1"]').length == 0 && $(this).children('[data-id="0"]').length == 0)) {  
                     $(this).append($(ui.draggable).clone());
-                    $('.valueRangeSlider').slider({min: /*function() { return $(this).data('min-value');}*/0, 
-                                                    max: /*function() { return $(this).data('max-value');},*/ 100,
-                                                     range:true,
-                                                     values:function() { 
-                                                        var array = Array.new
-                                                        array[0] = /*$(this).data('min-value')*/ 20;
-                                                        array[1] = /*$(this).data('max-value')*/ 70;
-                                                        return array;
-                                                    },
-                                                     slide: function( event, ui ) {
-                                                        console.log( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-                                                      }});
                     reloadData();
                 } else {
                     alert('You can only add columns of either number or string type at the same time');
@@ -82,6 +70,23 @@ $(document).ready(function () {
         content: function() { return $(this).next().html();}
     });
 
+    //add filter slider
+    $(document).on('click', '[rel=popover]', function() {
+        var popoverSlider = $(this).next().find('.valueRangeSlider');
+        var templateSlider = $(this).siblings('.popoverContent').find('.valueRangeSlider');
+
+        popoverSlider.slider({
+            min: parseInt(popoverSlider.data('min-value')), 
+            max: parseInt(popoverSlider.data('max-value')), 
+            range: true,
+            values: [parseInt(templateSlider.attr('data-lower-value')), parseInt(templateSlider.attr('data-higher-value'))],
+            slide: function( event, ui ) {
+                templateSlider.attr('data-lower-value', ui.values[0]);
+                templateSlider.attr('data-higher-value', ui.values[1]);
+            }
+        });
+    });
+
     //close the popover on click on the background
     $(':not(#anything)').on('click', function (e) {
         $('.popoverToggle').each(function () {
@@ -114,8 +119,7 @@ $(document).ready(function () {
     });
 
     //change the axis titles #todo: always keep value in sync with chart title
-     $(".axisTitle").bind('change onkeydown onpaste oninput', function() {
-        console.log('called');
+     $(".axisTitle").bind('input', function() {
         switch($(this).parent().attr('id')) {
             case 'yAxis':
                 chart.yAxis[0].setTitle({text: $(this).val()}); 

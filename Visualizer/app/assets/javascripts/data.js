@@ -12,6 +12,9 @@ $(document).ready(function () {
             text: 'Your Graph'
         },
         xAxis: {
+            title: {
+                text: ''
+            }
         },
         yAxis: [{
             title: {

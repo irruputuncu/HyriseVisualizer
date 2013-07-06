@@ -46,9 +46,10 @@
 		<% if column[:type] < 2 %>
 			<div class="control-group">
 				<label class="control-label" for="valueRangeSlider">Value range:</label>
-				<div class="controls">
-					<div style="float:left; width:10px;"><%= column[:min] %></div>
-					<div class="valueRangeSlider" style="float:left; width:60px; margin-left:12px;" data-min-value="<%= column[:min] %>" data-max-value="<%= column[:max] %>"></div><%= column[:max] %>
+				<div class="controls rangeSliderControls">
+					<div style="float: left;"><p><%= column[:min] %><p/></div>
+					<div class="valueRangeSlider" style="float: left;" data-min-value="<%= column[:min] %>" data-max-value="<%= column[:max] %>" data-lower-value="<%= column[:min] %>" data-higher-value="<%= column[:max] %>"></div>
+					<div style="float: left;"><p><%= column[:max] %></p></div>
 				</div>
 			</div>
 		<% end %>
