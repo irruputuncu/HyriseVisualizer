@@ -40,7 +40,7 @@ class Hyrise
 					projectionOperator.addField row.second
 
 					sortscanOperator = SortScanOperator.new
-					sortscanOperator.addField row.second
+					sortscanOperator.addField 0 #row.second
 
 					projectionOperator.addEdgeTo sortscanOperator
 
