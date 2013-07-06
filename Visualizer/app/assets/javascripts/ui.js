@@ -55,11 +55,6 @@ $(document).ready(function () {
     });
 
     //change series chart type
-    // $(document).on("change", ".chartTypeSelect", function() {
-    //     $(this).parents('.column').attr('data-chartType', $(this).val());
-    //     $(this).parents('.popover').siblings('.popoverContent').find('.chartTypeSelect option[value="'+$(this).val()+'"]').attr('selected', true);
-    //     changeChartType($(this).parents('.column').data('id'), $(this).val(), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
-    // });
     $(document).on("click", ".typeSelect", function() {
         $(this).parents('.column').attr('data-chartType',$(this).attr('value'));
         $(this).parent().parent().siblings('.typeSelectToggle').html($(this).text()+' <span class="caret">');
@@ -67,7 +62,7 @@ $(document).ready(function () {
         changeChartType($(this).parents('.column').data('id'), $(this).attr('value'), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
     });
 
-    // initilaize the options popover
+    //initilaize the options popover
     $(document).popover({
         selector: '[rel=popover]',
         html: true,
@@ -86,7 +81,7 @@ $(document).ready(function () {
         });
     });
 
-    //buttons for the graphselection
+    //buttons for the graph type selection
     $(".graphTypeButton").click( function() {
         if (chart.series) {
             for(var i = 0; i < chart.series.length; i++) {
@@ -94,4 +89,36 @@ $(document).ready(function () {
             }
         }
     });
+
+    //change the axis types
+    $(".axisTypeSelect").change( function() {
+        switch($(this).parent().attr('id')) {
+            case 'yAxis':
+                chart.yAxis[0].update({type: $(this).val()}); 
+            case 'oAxis':
+                chart.yAxis[1].update({type: $(this).val()}); 
+            case 'xAxis':
+                chart.xAxis[0].update({type: $(this).val()}); 
+        } 
+    });
+
+    //change the axis titles #todo: always keep value in sync with chart title
+     $(".axisTitle").change( function() {
+        switch($(this).parent().attr('id')) {
+            case 'yAxis':
+                chart.yAxis[0].setTitle({text: $(this).val()}); 
+                break;
+            case 'oAxis':
+                chart.yAxis[1].setTitle({text: $(this).val()});
+                break;
+            case 'xAxis':
+                chart.xAxis[0].setTitle({text: $(this).val()});
+                break;
+        }
+    });
+    //initialize axis titles
+    $('#ySettings .axisTitle').val(chart.options.yAxis[0].title.text);
+    $('#oppositeYSettings .axisTitle').val(chart.options.yAxis[1].title.text);
+    $('#xSettings .axisTitle').val(chart.options.xAxis[0].title.text);
+
 });

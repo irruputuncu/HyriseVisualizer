@@ -25,47 +25,8 @@
 		<div class="subHeading" > Employees </div>
 		<div class="btn disabled column" data-column="id" data-aggregation="none" data-type="1" data-id="0">Id
 
-			<span class="btn btn-small popoverToggle" rel="popover" data-toggle="popover"><i class="icon-cog"></i></span>
-  			<div class="popoverContent">
-  				<form class="form-horizontal">
-					<div class="control-group">
-						<label class="control-label" for="aggregationSelect">Aggregation:</label>
-						<div class="controls">
-							<select class="aggregationSelect">
-								<option value="none">None</option>
-								<option value="count">Count</option>
-								<option value="average">Average</option>
-								<option value="sum">Sum</option>
-							</select>
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="chartTypeSelect">Type:</label>
-						<div class="controls">
-							<select class="chartTypeSelect">
-							    <optgroup label="Line">
-							        <option>Line</option>
-							        <option>Spline</option>
-							    </optgroup>
-							    <optgroup label="Bar">
-							        <option>Bar</option>
-							        <option>Column</option>
-							    </optgroup>
-							    <optgroup label="Area">
-							        <option>Area</option>
-							        <option>Areaspline</option>
-							    </optgroup>
-							    <optgroup label="Scatter">
-							        <option>Scatter</option>
-							    </optgroup>
-							    <optgroup label="Pie">
-							        <option>Pie</option>
-							    </optgroup>
-							</select>
-						</div>
-					</div>
-				</form>
-			</div>
+			<%= render 'column_settings' %>
+
 		</div>
 		<div class="btn disabled column" data-column="name" data-mode="select">Name
 
@@ -100,116 +61,34 @@
 			<div class="subHeading"> <%= table %></div>
 			<% columns.each do | column | %>
 				<div class="btn disabled column" data-column="<%= column[:name] %>" data-table="<%= table %>" data-aggregation="none" data-type="<%= column[:type] %>" data-id="<%= index %>" data-chartType="line"> 	
+					
 					<button type="button" class="close removeColumn">×</button>
-					<%= column[:name] %> 
-					<span class="btn btn-small popoverToggle" rel="popover" data-toggle="popover"><i class="icon-cog"></i></span>
-		  			<div class="popoverContent">
-		  				<form class="form-horizontal">
-							<div class="control-group">
-								<label class="control-label" for="aggregationSelect">Aggregation:</label>
-								<div class="controls">
-									<div class="btn-group">
-										<button class="btn dropdown-toggle aggrSelectToggle" data-toggle="dropdown">
-											None
-											<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu">
-											<li><a class="aggrSelect" value="none">None</a></li>
-											<li><a class="aggrSelect" value="count">Count</a></li>
-											<li><a class="aggrSelect" value="average">Average</a></li>
-											<li><a class="aggrSelect" value="sum">Sum</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="chartTypeSelect">Type:</label>
-								<div class="controls">
-									<div class="btn-group">
-										<button class="btn dropdown-toggle typeSelectToggle" data-toggle="dropdown">
-											Line
-											<span class="caret"></span>
-										</button>
-										<ul class="dropdown-menu">
-											<li class="nav-header">Lines</li>
-											<li><a class="typeSelect" value="line">Line</a></li>
-											<li><a class="typeSelect" value="spline">Spline</a></li>
-											<li class="nav-header">Bars</li>
-											<li><a class="typeSelect" value="bar">Bar</a></li>
-											<li><a class="typeSelect" value="column">Column</a></li>
-											<li class="nav-header">Areas</li>
-											<li><a class="typeSelect" value="area">Area</a></li>
-											<li><a class="typeSelect" value="areaspline">Areaspline</a></li>
-											<li class="nav-header">Others</li>
-											<li><a class="typeSelect" value="scatter">Scatter</a></li>
-											<li><a class="typeSelect" value="pie">Pie</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<% if column[:type] == 0 || column[:type] == 1 %>
-							<div class="control-group">
-								<label class="control-label" for="valueRangeSlider">Value range:</label>
-								<div class="controls">
-									<div class="valueRangeSlider" data-min-value="<%= column[:min] %>" data-max-value="<%= column[:max] %>"></div>
-								</div>
-							</div>
-							<% end %>
-						</form>
-					</div>
+
+					<%= column[:name] %>
+					<%= render 'column_settings' %>
+
 				</div>
 				<% index += 1 %>
 			<% end %>
 		<% end %>
 	</div>
 	
-	<div id="graphOptions">
-		<button type="button" class="btn graphTypeButton" data-type="line">Line</button>
-		<button type="button" class="btn graphTypeButton" data-type="bar">Bar</button>
-		<button type="button" class="btn graphTypeButton" data-type="spline">Spline</button>
-		<button type="button" class="btn graphTypeButton" data-type="area">Area</button>
-		<button type="button" class="btn graphTypeButton" data-type="areaspline">AreaSpline</button>
-		<button type="button" class="btn graphTypeButton" data-type="scatter">Scatter</button>
-		<button type="button" class="btn graphTypeButton" data-type="pie">Pie</button>
-	</div>
-	<div id="ySettings">
+	<%= render 'graph_options' %>
+
+	<div class="axis" id="ySettings">
 		<h3> y-Axis </h3>
-		<div class="axisDroppableContainer">
-			Drop a column here
-		</div>
+		<%= render 'axis_settings', axis: 'yAxis' %>
 	</div>
 	<div id="graph" style="width:100%; height:400px;"></div>
-	<div id="oppositeYSettings">
+	<div class="axis" id="oppositeYSettings">
 		<h3> opposite y-Axis </h3>
-		<div class="axisDroppableContainer">
-			Drop a column here
-		</div>
+		<%= render 'axis_settings', axis: 'oAxis' %>
 	</div>
-	<div id="xSettings">
+	<div class="axis" id="xSettings">
 		<h3> x-Axis </h3>
-		<div class="axisDroppableContainer xAxis">
-			Drop a column here
-		</div>
+		<%= render 'axis_settings', axis: 'xAxis' %>
 	</div>
 
-	<div id="dataTableContainer">
-		<h3> Retrieved Data </h3>
-		<table width="100%" class="table table-striped table-bordered" id="dataTable">
-			<tr>
-				<th>Test1</th>
-				<th>Test2</th>
-			</tr>
-				
-			<tr class="dataTableRow">
-				<td>val11</td>
-				<td>val12</td>
-			</tr>
-
-			<tr class="dataTableRow">
-				<td>val21</td>
-				<td>val22</td>
-			</tr>
-		</table>
-	</div>
+	<%= render 'data_table' %>
 	
 </div>
