@@ -18,7 +18,9 @@ $(document).ready(function () {
                 }
                 if (($(ui.draggable).data("type") < 2 && $(this).children('[data-id="2"]').length == 0) || ($(ui.draggable).data("type") == 2 && $(this).children('[data-id="1"]').length == 0 && $(this).children('[data-id="0"]').length == 0)) {  
                     $(this).append($(ui.draggable).clone());
-                    $('.valueRangeSlider').slider({min: 0, max: 100, step:1});
+                    $('.valueRangeSlider').slider({min: function() { return $(this).data('min-value');}, 
+                                                    max: function() { return $(this).data('max-value');},
+                                                     step:1});
                     reloadData();
                 } else {
                     alert('You can only add columns of either number or string type at the same time');
