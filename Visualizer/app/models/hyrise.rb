@@ -38,7 +38,13 @@ class Hyrise
 
 					projectionOperator.addInput row.first
 					projectionOperator.addField row.second
-					data = executeQuery projectionOperator.getQuery
+
+					sortscanOperator = SortScanOperator.new
+					sortscanOperator.addField row.second
+
+					projectionOperator.addEdgeTo sortscanOperator
+
+					data = executeQuery sortscanOperator.getQuery
 
 					unless data['rows'].nil?
 						table[:min] = data['rows'].first.first
