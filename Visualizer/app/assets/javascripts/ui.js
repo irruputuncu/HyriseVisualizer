@@ -105,7 +105,8 @@ $(document).ready(function () {
     });
 
     //change the axis titles #todo: always keep value in sync with chart title
-     $(".axisTitle").change( function() {
+     $(".axisTitle").bind('change onkeydown onpaste oninput', function() {
+        console.log('called');
         switch($(this).parent().attr('id')) {
             case 'yAxis':
                 chart.yAxis[0].setTitle({text: $(this).val()}); 

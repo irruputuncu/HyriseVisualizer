@@ -25,7 +25,7 @@
 		<div class="subHeading" > Employees </div>
 		<div class="btn disabled column" data-column="id" data-aggregation="none" data-type="1" data-id="0">Id
 
-			<%= render 'column_settings' %>
+			<%= render 'column_settings', column: {type: 1} %>
 
 		</div>
 		<div class="btn disabled column" data-column="name" data-mode="select">Name
@@ -65,7 +65,7 @@
 					<button type="button" class="close removeColumn">×</button>
 
 					<%= column[:name] %>
-					<%= render 'column_settings' %>
+					<%= render 'column_settings', column: column %>
 
 				</div>
 				<% index += 1 %>
