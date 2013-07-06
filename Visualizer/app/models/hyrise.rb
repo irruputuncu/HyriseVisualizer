@@ -71,9 +71,27 @@ class Hyrise
 			tablename = column["table"]
 			projectionOperator = ProjectionScanOperator.new
 
-			projectionOperator.addInput tablename 
+			
 			projectionOperator.addField xaxis["column"] # so this column will be the first in result
 			projectionOperator.addField column["column"]
+
+			#check for min and max values
+			if not column['min'].nil?
+				simpletablescanOperator = SimpleTableScanOperator.new
+
+				simpletablescanOperator.addInput tablename
+
+				if not column['max'].nil?
+					simpletablescanOperator.addPredicate(SCAN_TYPE::AND)
+					simpletablescanOperator.addPredicate(SCAN_TYPE::LT,0,column['column'], column['type'].to_i,column['max'].to_i)
+				end
+
+				simpletablescanOperator.addPredicate(SCAN_TYPE::GT,0,column['column'], column['type'].to_i,column['min'].to_i)
+
+				simpletablescanOperator.addEdgeTo projectionOperator
+			else
+				projectionOperator.addInput tablename 
+			end
 
 			if column["aggregation"] != 'none'
 				groupOperator = GroupByScanOperator.new
@@ -124,6 +142,7 @@ class Hyrise
 
 			content.push finalResult 
 		end
+
 
 		return content
 	end

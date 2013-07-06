@@ -33,16 +33,16 @@ $(document).ready(function () {
 var changeChartType = function(columnId, chartType, axis) {
     for (var i = 0; i < loadedSeries.length; i++) {
         if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['axis'] == axis) {
-            console.log(i);
-            console.log(chartType);
+            //console.log(i);
+            //console.log(chartType);
             chart.series[i].update({type: chartType});
         }
     }
 }
 
 var removeSeriesWithColumn = function(columnId, axis) {
-    console.log(axis);
-    console.log(columnId);
+    //console.log(axis);
+    //console.log(columnId);
     if (axis == 'x') {
         while (chart.series.length) {
             chart.series[0].remove();
@@ -86,7 +86,9 @@ var reloadData = function() {
                 column: $(this).data("column"),
                 type: $(this).data("type"),
                 table: $(this).data("table"),
-                id: $(this).data("id")
+                id: $(this).data("id"),
+                min: $(this).data("lower-value"),
+                max: $(this).data("higher-value")
             };
 
             series = {

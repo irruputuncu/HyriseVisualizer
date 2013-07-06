@@ -83,6 +83,11 @@ $(document).ready(function () {
             slide: function( event, ui ) {
                 templateSlider.attr('data-lower-value', ui.values[0]);
                 templateSlider.attr('data-higher-value', ui.values[1]);
+
+                $(this).parents('.column').attr('data-lower-value', ui.values[0]);
+                $(this).parents('.column').attr('data-higher-value', ui.values[1]);
+
+                reloadData();
             }
         });
     });
