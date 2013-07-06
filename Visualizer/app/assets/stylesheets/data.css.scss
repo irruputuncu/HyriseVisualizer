@@ -50,21 +50,20 @@ body, html {
 .axisDroppableContainer{
 	height: 100%;
 	min-height: 35px;
-	margin-top: 20px;
-	max-width: 400px;
+	width: 100%;
 
 	background-color: rgba(81, 81, 81, 0.3);
 	border-radius:5px;
-	margin-left:auto;
-	margin-right:auto;
 	border: solid $borderColor;
 	border-style:none;
 	border-width: 2px;
+
+	margin-bottom: 20px;
 }
 
 #attributes, .axisDroppableContainer{
 	.btn.disabled {
-		width: 70%;
+		width: 80%;
 		margin: 3px;
 		opacity: 1;
 		cursor: pointer;
@@ -112,8 +111,10 @@ body, html {
 	.popoverToggle {
 		display: none;
 	}
-	.axisDroppableContainer {
-		width: 30%;
+	.control-group {
+		width: 31%;
+		float: left;
+		padding-right: 5px;
 	}
 }
 
@@ -167,5 +168,22 @@ body, html {
 	}
 	button {
 		min-width: 100px;
+
+		span {
+			float: right;
+		}
+	}
+}
+
+.axis {
+	padding: 0px;
+}
+
+.axisSettings {
+	margin: 10px;
+	text-align: left;
+
+	input, select {
+		width: 90%;
 	}
 }

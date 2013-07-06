@@ -12,15 +12,18 @@ $(document).ready(function () {
             text: 'Your Graph'
         },
         xAxis: {
-            title: {
-                text: 'Reference'
-            }
         },
-        yAxis: {
+        yAxis: [{
             title: {
                 text: 'Values'
             }
-        }
+        }, {
+            opposite: true,
+            title: {
+                text: ''
+            },
+            showEmpty: false
+        }]
     });
 });
 
@@ -86,7 +89,7 @@ var reloadData = function() {
             series = {
                 'yColumn': data,
                 'id': seriesCount,
-                'axis': $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1)
+                'axis': $(this).parents('.axis').attr('id').substring(0,1)
             };
             newSeries.push(series);
             seriesCount++;
@@ -115,6 +118,7 @@ var reloadData = function() {
                         chart.xAxis[0].setCategories(json[0]['categories'], true);
                     }
                     chart.xAxis[0].setTitle({text:xAxis['column']}, true);
+                    $('#xSettings .axisTitle').val(xAxis['column']);
 
                     //remove old series from chart
                     while (chart.series.length) {
@@ -123,17 +127,22 @@ var reloadData = function() {
 
                     for (var i = 0; i < json.length; i++) {
 
+                        var axis = 0;
+                        if (json[i]['axis'] = 'o') {
+                            axis = 1;
+                        }
+
                         // update y-Axis with series
                         chart.addSeries({
                             name: json[i]['name'],
-                            data: json[i]['data']
+                            data: json[i]['data'],
+                            yAxis: axis
                         }, true);
                         //preserve chart type after reload
                         chart.series[chart.series.length-1].update({type:  $('.axisDroppableContainer [data-id="'+json[i]['id']+'"]').attr('data-chartType')});
-                    }
+                    }                    
 
                     // load the simple data table on bottom of page
-
                     $('#dataTable').children().each(function(){
                         $(this).remove();
                     });
