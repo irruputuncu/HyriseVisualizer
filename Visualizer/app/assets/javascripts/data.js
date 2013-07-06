@@ -17,6 +17,7 @@ $(document).ready(function () {
             }
         },
         yAxis: [{
+            opposite: false,
             title: {
                 text: 'Values'
             }
@@ -33,16 +34,12 @@ $(document).ready(function () {
 var changeChartType = function(columnId, chartType, axis) {
     for (var i = 0; i < loadedSeries.length; i++) {
         if (loadedSeries[i]['yColumn']['id'] == columnId && loadedSeries[i]['axis'] == axis) {
-            //console.log(i);
-            //console.log(chartType);
             chart.series[i].update({type: chartType});
         }
     }
 }
 
 var removeSeriesWithColumn = function(columnId, axis) {
-    //console.log(axis);
-    //console.log(columnId);
     if (axis == 'x') {
         while (chart.series.length) {
             chart.series[0].remove();
@@ -56,8 +53,8 @@ var removeSeriesWithColumn = function(columnId, axis) {
             }
         }
         for (var i = 0; i < indicesToRemove.length; i++) {
-            chart.series[i].remove();
-            loadedSeries.splice(i, 1);
+            chart.series[indicesToRemove[i]].remove();
+            loadedSeries.splice(indicesToRemove[i], 1);
         }
     }  
 };
@@ -133,7 +130,7 @@ var reloadData = function() {
                     for (var i = 0; i < json.length; i++) {
 
                         var axis = 0;
-                        if (json[i]['axis'] = 'o') {
+                        if (json[i]['axis'] == 'o') {
                             axis = 1;
                         }
 

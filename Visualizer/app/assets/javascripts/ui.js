@@ -34,7 +34,7 @@ $(document).ready(function () {
     
     //remove a column when x is clicked
     $(document).on("click", ".axisDroppableContainer .removeColumn", function() {
-        removeSeriesWithColumn($(this).parent().data('id'), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
+        removeSeriesWithColumn($(this).parent().data('id'), $(this).parents('.axis').attr('id').substring(0,1));
         $(this).parent().remove();
     });
 
@@ -58,7 +58,7 @@ $(document).ready(function () {
         $(this).parents('.column').attr('data-chartType',$(this).attr('value'));
         $(this).parent().parent().siblings('.typeSelectToggle').html($(this).text()+' <span class="caret">');
         $(this).parents('.popover').siblings('.popoverContent').find('.typeSelectToggle').html($(this).text()+' <span class="caret">');
-        changeChartType($(this).parents('.column').data('id'), $(this).attr('value'), $(this).parents('.axisDroppableContainer').parent().attr('id').substring(0,1));
+        changeChartType($(this).parents('.column').data('id'), $(this).attr('value'), $(this).parents('.axis').attr('id').substring(0,1));
     });
 
     //initilaize the options popover
@@ -113,27 +113,31 @@ $(document).ready(function () {
 
     //change the axis types
     $(".axisTypeSelect").change( function() {
-        switch($(this).parent().attr('id')) {
+
+        switch($(this).parents('.axisSettings').attr('id')) {
             case 'yAxis':
-                chart.yAxis[0].update({type: $(this).val()}); 
+                chart.yAxis[0].update({type: $(this).val()});
+                break; 
             case 'oAxis':
                 chart.yAxis[1].update({type: $(this).val()}); 
+                break; 
             case 'xAxis':
                 chart.xAxis[0].update({type: $(this).val()}); 
+                break;
         } 
     });
 
     //change the axis titles #todo: always keep value in sync with chart title
      $(".axisTitle").bind('input', function() {
-        switch($(this).parent().attr('id')) {
+        switch($(this).parents('.axisSettings').attr('id')) {
             case 'yAxis':
-                chart.yAxis[0].setTitle({text: $(this).val()}); 
+                chart.options.yAxis[0].setTitle({text: $(this).val()}); 
                 break;
             case 'oAxis':
-                chart.yAxis[1].setTitle({text: $(this).val()});
+                chart.options.yAxis[1].setTitle({text: $(this).val()});
                 break;
             case 'xAxis':
-                chart.xAxis[0].setTitle({text: $(this).val()});
+                chart.options.xAxis[0].setTitle({text: $(this).val()});
                 break;
         }
     });
