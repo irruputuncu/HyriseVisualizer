@@ -1,5 +1,10 @@
 $(document).ready(function () { 
 
+    //make attributes draggable and clone them
+    $("#attributes > .btn").draggable({ 
+        helper: 'clone'
+    });
+
     //define dropzone for the attributes
     $(".axisDroppableContainer").droppable({
         over: function(event, ui){
@@ -25,11 +30,6 @@ $(document).ready(function () {
             }
             $(this).removeClass("hoverDroppable");
         }
-    });
-
-    //make attributes draggable and clone them
-    $("#attributes > .btn").draggable({ 
-        helper: 'clone'
     });
     
     //remove a column when x is clicked
