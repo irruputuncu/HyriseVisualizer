@@ -138,15 +138,17 @@ $(document).ready(function () {
 
     //change the axis titles #todo: always keep value in sync with chart title
      $(".axisTitle").bind('input', function() {
+        console.log($(this).parents('.axisSettings').attr('id'));
+        console.log($(this).val());
         switch($(this).parents('.axisSettings').attr('id')) {
             case 'yAxis':
-                chart.options.yAxis[0].setTitle({text: $(this).val()}); 
+                chart.yAxis[0].setTitle({text: $(this).val()}); 
                 break;
             case 'oAxis':
-                chart.options.yAxis[1].setTitle({text: $(this).val()});
+                chart.yAxis[1].setTitle({text: $(this).val()});
                 break;
             case 'xAxis':
-                chart.options.xAxis[0].setTitle({text: $(this).val()});
+                chart.xAxis[0].setTitle({text: $(this).val()});
                 break;
         }
     });
