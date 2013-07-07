@@ -123,7 +123,6 @@ $(document).ready(function () {
 
     //change the axis types
     $(".axisTypeSelect").change( function() {
-
         switch($(this).parents('.axisSettings').attr('id')) {
             case 'yAxis':
                 chart.yAxis[0].update({type: $(this).val()});
