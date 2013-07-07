@@ -62,7 +62,14 @@ $(document).ready(function () {
     });
 
     //initilaize the options popover
-    $(document).popover({
+    $('#oAxis').popover({
+        selector: '[rel=popover]',
+        html: true,
+        placement: 'left',
+        title: 'Options',
+        content: function() { return $(this).next().html();}
+    });
+    $('#yAxis').popover({
         selector: '[rel=popover]',
         html: true,
         placement: 'right',
@@ -109,6 +116,9 @@ $(document).ready(function () {
                 chart.series[i].update({type: $(this).data('type')}); 
             }
         }
+        $('.axisDroppableContainer .column').attr('data-chartType', $(this).data('type'));
+        $('.graphTypeButton').removeClass('active');
+        $(this).addClass('active');
     });
 
     //change the axis types

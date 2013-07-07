@@ -1,5 +1,4 @@
 var chart;
-var loadedColumns = []; //contains column id and the data, needed?
 var loadedSeries = []; //contains the series with refernces to columns and the charts series used for altering
 
 $(document).ready(function () { 
