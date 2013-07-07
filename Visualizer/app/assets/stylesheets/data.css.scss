@@ -45,6 +45,9 @@ body, html {
 	.actionSelect, .removeColumn, .popoverToggle {
 		display: none;
 	}
+	.btn.disabled {
+		cursor: pointer;
+	}	
 }
 
 .axisDroppableContainer{
@@ -66,12 +69,11 @@ body, html {
 		width: 80%;
 		margin: 3px;
 		opacity: 1;
-		cursor: pointer;
 	}	
 }
 
 #dataTableContainer{
-	width:85%;
+	width:100%;
 	float:left;
 	border-top: $borderWidth solid $borderColor;
 }
