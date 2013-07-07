@@ -114,9 +114,9 @@ class Hyrise
 					when 'count'
 						groupOperator.addFunction(1, xaxis["column"])
 					when 'average'
-						groupOperator.addFunction(2, xaxis["column"])
+						groupOperator.addFunction(2, column["column"])
 					when 'sum'
-						groupOperator.addFunction(0, xaxis["column"])
+						groupOperator.addFunction(0, column["column"])
 					else
 						groupOperator.addFunction(1, xaxis["column"])
 				end
@@ -125,7 +125,12 @@ class Hyrise
 				projectionOperator.addEdgeTo(groupOperator)
 				hashBuildOperator.addEdgeTo(groupOperator)
 
-				result = executeQuery groupOperator.getQuery
+				sortscan = SortScanOperator.new
+				sortscan.addField 0
+
+				groupOperator.addEdgeTo sortscan
+
+				result = executeQuery sortscan.getQuery
 			else
 				puts projectionOperator.getQuery
 				result = executeQuery projectionOperator.getQuery
@@ -216,6 +221,8 @@ class Hyrise
 	protected
 
 		def executeQuery(query, url = HYRISE_DEFAULT_URL)
+			puts query
+
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})
 
