@@ -27,13 +27,12 @@ class Hyrise
 		tables = Hash.new
 		result = executeQuery metaOperator.getQuery
 
-		
 		unless result['rows'].nil?
 			result['rows'].each do | row |
 				table = { name: row.second, type: row.third}
 
 				#get the smalles and the highest value for each column if type is 0 or 1
-				if row.third == 0 || row.third == 1
+				if row.third < 2
 					projectionOperator = ProjectionScanOperator.new
 
 					projectionOperator.addInput row.first
@@ -77,8 +76,7 @@ class Hyrise
 			tablename = column["table"]
 			projectionOperator = ProjectionScanOperator.new
 
-			
-			projectionOperator.addField xaxis["column"] # so this column will be the first in result
+			projectionOperator.addField xaxis["column"] # so this column will always be the first in result
 			projectionOperator.addField column["column"]
 
 			#check for min and max values
@@ -132,7 +130,6 @@ class Hyrise
 
 				result = executeQuery sortscan.getQuery
 			else
-				puts projectionOperator.getQuery
 				result = executeQuery projectionOperator.getQuery
 			end
 
@@ -158,70 +155,12 @@ class Hyrise
 			content.push finalResult 
 		end
 
-
 		return content
-	end
-
-	def getContentOfColumns(columns)
-		columns = columns.values.sort_by { |v| v["mode"]}
-		tablename = columns.first["table"]
-
-		projectionOperator = ProjectionScanOperator.new
-		projectionOperator.addInput tablename 
-		
-		groupOperator = GroupByScanOperator.new
-		hashBuildOperator = HashBuildOperator.new
-		shouldGroup = false
-
-		columns.each do |column|
-			if column["mode"] == "select" or column["mode"] == "group"
-				projectionOperator.addField column["column"]
-			end
-
-			if column["mode"] == "group"
-				groupOperator.addField column["column"]
-				groupOperator.addFunction(1, column["column"])
-				hashBuildOperator.addField column["column"]
-				shouldGroup = true
-			end
-		end
-
-		if shouldGroup
-			projectionOperator.addEdgeTo(hashBuildOperator)
-			projectionOperator.addEdgeTo(groupOperator)
-			hashBuildOperator.addEdgeTo(groupOperator)
-			query = groupOperator.getQuery
-		else
-			query = projectionOperator.getQuery
-		end
-		puts query
-		
-		results = executeQuery query
-		#puts results
-		
-		output = Hash.new;
-
-		output['rows'] = results['rows']
-		header = results["header"]
-
-		unless header.nil?
-			header.each do | column |
-				index = header.index(column)
-				output[column] = Array.new
-				results['rows'].each do | row |
-					output[column].push row[index]
-				end
-			end
-		end
-		
-		#puts output['rows']
-		return output
 	end
 
 	protected
 
 		def executeQuery(query, url = HYRISE_DEFAULT_URL)
-			puts query
 
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})

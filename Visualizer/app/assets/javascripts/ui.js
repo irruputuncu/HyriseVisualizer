@@ -138,8 +138,6 @@ $(document).ready(function () {
 
     //change the axis titles #todo: always keep value in sync with chart title
      $(".axisTitle").bind('input', function() {
-        console.log($(this).parents('.axisSettings').attr('id'));
-        console.log($(this).val());
         switch($(this).parents('.axisSettings').attr('id')) {
             case 'yAxis':
                 chart.yAxis[0].setTitle({text: $(this).val()}); 

@@ -60,10 +60,6 @@ var removeSeriesWithColumn = function(columnId, axis) {
 
 var reloadData = function() {
 
-    //collect necessary data
-    //remove old series (later check for changes)
-    //update chart (add series)
-
     if (($('#ySettings .column').length > 0 || $('#oppositeYSettings .column').length > 0) && $('#xSettings .column').length > 0) {
         var newSeries = [];
         var xAxisColumn = $('#xSettings .btn.disabled');
