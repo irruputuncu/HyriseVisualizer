@@ -22,40 +22,6 @@
 
 	<div id="attributes">
 		<h3> Attributes </h3>
-		<div class="subHeading" > Employees </div>
-		<div class="btn disabled column" data-column="id" data-aggregation="none" data-type="1" data-id="0">Id
-
-			<%= render 'column_settings', column: {type: 1, min: 0, max: 10000} %>
-
-		</div>
-		<div class="btn disabled column" data-column="name" data-mode="select">Name
-
-		<div class="btn-group" style="float:right;">
-				<button class="btn btn-mini dropdown-toggle actionSelect"  data-toggle="dropdown">Action<span class="caret"></span></button>
-
-				<ul class="dropdown-menu">
-					<li>
-	    				<a class="modeSelect" mode="select">Select</a>
-	    			</li>
-	    			<li>
-	    				<a class="modeSelect" mode="group">Group</a>
-	    			</li>
-	    			<li>
-	    				<a class="modeSelect" mode="order">Order by</a>
-	    			</li>
-	  			</ul>
-			</div>
-
-		</div>
-		<div class="btn disabled" data-column="surname">Surname</div>
-		<div class="btn disabled">Name</div>
-		<div class="btn disabled">Company</div>
-
-		<div class="subHeading"> Companies </div>
-		<div class="btn disabled">Id</div>
-		<div class="btn disabled">Name</div>
-		<div class="btn disabled">Manager</div>
-
 		<% index = 0 %>
 		<% @scheme.each_pair do | table, columns| %>
 			<div class="subHeading"> <%= table %></div>
