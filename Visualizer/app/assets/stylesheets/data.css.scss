@@ -69,7 +69,7 @@ body, html {
 	}
 }
 
-#attributes, .axisDroppableContainer{
+#attributes, .axisDroppableContainer, .filterDroppableContainer {
 	.btn.disabled {
 		width: 80%;
 		margin: 3px;
@@ -125,12 +125,10 @@ body, html {
 		display: none;
 	}
 }
-#xSettings, #graphOptions {
-	.control-group {
-		width: 31%;
-		float: left;
-		padding: 1%;
-	}
+#xSettings .control-group, #graphOptions > .control-group {
+	width: 31%;
+	float: left;
+	padding: 1%;
 }
 
 .removeColumn {

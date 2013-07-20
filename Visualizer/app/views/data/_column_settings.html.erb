@@ -47,9 +47,9 @@
 			<div class="control-group rangeControls">
 				<label class="control-label" for="valueRangeSlider">Value range:</label>
 				<div class="controls rangeSliderControls">
-					<div style="float: left;"><p><%= column[:min] %><p/></div>
+					<div style="float: left;"><p class="minValue"><%= column[:min] %><p/></div>
 					<div class="valueRangeSlider" style="float: left;" data-min-value="<%= column[:min] %>" data-max-value="<%= column[:max] %>" data-lower-value="<%= column[:min] %>" data-higher-value="<%= column[:max] %>"></div>
-					<div style="float: left;"><p><%= column[:max] %></p></div>
+					<div style="float: left;"><p class="maxValue"><%= column[:max] %></p></div>
 				</div>
 			</div>
 		<% end %>

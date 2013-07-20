@@ -31,11 +31,34 @@ $(document).ready(function () {
             $(this).removeClass("hoverDroppable");
         }
     });
+
+    //define filter dropzone
+    $('.filterDroppableContainer').droppable({
+        over: function(event, ui) {
+            $(this).addClass("hoverDroppable");
+        },
+        out: function(event, ui) {
+            $(this).removeClass("hoverDroppable");
+        },
+        drop: function(event, ui) {
+            if ($(this).children('[data-id="' + $(ui.draggable).data("id") + '"]').length <= 0) {         
+                $(this).append($(ui.draggable).clone());
+                reloadData();
+            }
+            $(this).removeClass("hoverDroppable");
+        }
+    });
     
-    //remove a column when x is clicked
+    //remove a column when x is clicked from the axis
     $(document).on("click", ".axisDroppableContainer .removeColumn", function() {
         removeSeriesWithColumn($(this).parent().data('id'), $(this).parents('.axis').attr('id').substring(0,1));
         $(this).parent().remove();
+    });
+
+    //remove a filter when x is clicked and reload
+    $(document).on("click", ".filterDroppableContainer .removeColumn", function() {
+        $(this).parent().remove();
+        reloadData();
     });
 
     // mode selest --> soon deprecated (after aggregation select is used)
@@ -69,7 +92,7 @@ $(document).ready(function () {
         title: 'Options',
         content: function() { return $(this).next().html();}
     });
-    $('#yAxis').popover({
+    $('#yAxis, #filterContainer').popover({
         selector: '[rel=popover]',
         html: true,
         placement: 'right',
@@ -94,6 +117,9 @@ $(document).ready(function () {
                 $(this).parents('.column').attr('data-lower-value', ui.values[0]);
                 $(this).parents('.column').attr('data-higher-value', ui.values[1]);
 
+                $(this).siblings().children('.minValue').text(ui.values[0]);
+                $(this).siblings().children('.maxValue').text(ui.values[1]);
+
                 reloadData();
             }
         });
@@ -116,7 +142,7 @@ $(document).ready(function () {
                 chart.series[i].update({type: $(this).data('type')}); 
             }
         }
-        $('.axisDroppableContainer .column').attr('data-chartType', $(this).data('type'));
+        $('.column').attr('data-chartType', $(this).data('type'));
         $('.graphTypeButton').removeClass('active');
         $(this).addClass('active');
     });

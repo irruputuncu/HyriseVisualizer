@@ -73,17 +73,9 @@ class Hyrise
 		series.each do | index, serie |
 			finalResult = Hash.new
 			column = serie['yColumn']
-			tablename = column["table"]
-
-			inputTableSpecified = false
-
-			projectionOperator = ProjectionScanOperator.new
-
-			projectionOperator.addField xaxis["column"]
-			projectionOperator.addField column["column"]
 
 			queryOperator = composeFilterOperator filters
-			queryOperator = composeLocalFilterOparator column, queryOperator
+			queryOperator = composeLocalFilterOperator column, queryOperator
 			queryOperator = composeProjectionOperator xaxis, column, queryOperator
 			queryOperator = composeAggregationOperator xaxis, column, queryOperator
 
@@ -118,6 +110,8 @@ class Hyrise
 
 		def executeQuery(query, url = HYRISE_DEFAULT_URL)
 
+			puts query
+
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})
 
@@ -142,9 +136,10 @@ class Hyrise
 		def composeFilterOperator(filters)
 
 			returnOperator = nil
+			return returnOperator if filters.nil?
 			
-			filters.each do |filter|
-				returnOperator = composeLocalFilterOperator(filter, returnOperator)
+			filters.each do | index, filterColumn |
+				returnOperator = composeLocalFilterOperator(filterColumn, returnOperator)
 			end
 
 			return returnOperator
@@ -152,7 +147,7 @@ class Hyrise
 
 		def composeLocalFilterOperator(column, currentOperator)
 
-			returnOperator = nil
+			returnOperator = currentOperator
 
 			if !column['min'].nil?				
 				minFilterOperator = SimpleTableScanOperator.new
@@ -162,25 +157,25 @@ class Hyrise
 				minFilterOperator.addPredicate(SCAN_TYPE::GT,0,column['column'], column['type'].to_i,column['min'].to_i)
 				minFilterOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['min'].to_i)
 
-				if currentOperator.nil? 
-					minFilterOperator.addInput tablename
+				if returnOperator.nil? 
+					minFilterOperator.addInput column["table"]
 				else
-					currentOperator addEdgeTo minFilterOperator
+					returnOperator.addEdgeTo minFilterOperator
 				end
 				returnOperator = minFilterOperator
 			end
 			if !column['max'].nil?
 				maxFilterOperator = SimpleTableScanOperator.new
-				maxFilterOperator.addInput tablename
+
 				maxFilterOperator.addPredicate(SCAN_TYPE::OR)
 
 				maxFilterOperator.addPredicate(SCAN_TYPE::LT,0,column['column'], column['type'].to_i,column['max'].to_i)
 				maxFilterOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['max'].to_i)
 
 				if returnOperator.nil?
-					maxFilterOperator.addInput tablename
+					maxFilterOperator.addInput column["table"]
 				else 
-					returnOperator addEdgeTo maxFilterOperator
+					returnOperator.addEdgeTo maxFilterOperator
 				end
 				returnOperator = maxFilterOperator
 			end
@@ -196,9 +191,9 @@ class Hyrise
 			projectionOperator.addField column["column"]
 
 			if !currentOperator.nil? 
-				currentOperator addEdgeTo projectionOperator
+				currentOperator.addEdgeTo projectionOperator
 			else
-				projectionOperator addInput column["table"]
+				projectionOperator.addInput column["table"]
 			end
 
 			return projectionOperator

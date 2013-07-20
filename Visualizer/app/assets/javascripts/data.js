@@ -60,6 +60,7 @@ var removeSeriesWithColumn = function(columnId, axis) {
 
 var collectSeries = function() {
     var newSeries = [];
+    var seriesCount = 0;
 
     var collectFunction = function(){
 
@@ -89,9 +90,9 @@ var collectSeries = function() {
 }
 
 var collectFilters = function() {
-    var filters = []
+    var filters = [];
 
-    $('#filterContainer').each( function() {
+    $('#filterContainer .column').each( function() {
         var data = {
             column: $(this).data("column"),
             table: $(this).data("table"),
@@ -113,7 +114,6 @@ var reloadData = function() {
         
         var newSeries = collectSeries();
         var xAxisColumn = $('#xSettings .btn.disabled');
-        var seriesCount = 0;
         var xAxis = {
             "mode": xAxisColumn.data("mode"),
             "column": xAxisColumn.data("column"),
@@ -121,6 +121,8 @@ var reloadData = function() {
             "table": xAxisColumn.data("table")
         };
         var filters = collectFilters();
+
+        console.log(filters);
 
         $.ajax({
             url: 'getContentForSeries',
