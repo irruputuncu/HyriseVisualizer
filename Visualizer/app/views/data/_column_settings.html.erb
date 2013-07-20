@@ -1,7 +1,7 @@
 <span class="btn btn-small popoverToggle" rel="popover" data-toggle="popover"><i class="icon-cog"></i></span>
 	<div class="popoverContent">
 		<form class="form-horizontal">
-		<div class="control-group">
+		<div class="control-group aggregationControls">
 			<label class="control-label" for="aggregationSelect">Aggregation:</label>
 			<div class="controls">
 				<div class="btn-group">
@@ -18,7 +18,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group typeControls">
 			<label class="control-label" for="chartTypeSelect">Type:</label>
 			<div class="controls">
 				<div class="btn-group">
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 		<% if column[:type] < 2 %>
-			<div class="control-group">
+			<div class="control-group rangeControls">
 				<label class="control-label" for="valueRangeSlider">Value range:</label>
 				<div class="controls rangeSliderControls">
 					<div style="float: left;"><p><%= column[:min] %><p/></div>

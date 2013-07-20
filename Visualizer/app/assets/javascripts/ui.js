@@ -136,7 +136,7 @@ $(document).ready(function () {
         } 
     });
 
-    //change the axis titles #todo: always keep value in sync with chart title
+    //change the axis titles
      $(".axisTitle").bind('input', function() {
         switch($(this).parents('.axisSettings').attr('id')) {
             case 'yAxis':
@@ -154,5 +154,12 @@ $(document).ready(function () {
     $('#ySettings .axisTitle').val(chart.options.yAxis[0].title.text);
     $('#oppositeYSettings .axisTitle').val(chart.options.yAxis[1].title.text);
     $('#xSettings .axisTitle').val(chart.options.xAxis[0].title.text);
+
+    //change graph title
+    $('#graphTitle').bind('input', function() {
+        chart.setTitle({text: $(this).val()});
+    });
+    //initialize graph title
+    $('#graphTitle').val(chart.title.text);
 
 });

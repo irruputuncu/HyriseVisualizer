@@ -67,71 +67,27 @@ class Hyrise
 		return executeQuery metaOperator.getQuery
 	end
 
-	def getContentForSeries(series, xaxis)
+	def getContentForSeries(series, xaxis, filters)
 
 		content = Array.new
 		series.each do | index, serie |
 			finalResult = Hash.new
 			column = serie['yColumn']
 			tablename = column["table"]
+
+			inputTableSpecified = false
+
 			projectionOperator = ProjectionScanOperator.new
 
-			projectionOperator.addField xaxis["column"] # so this column will always be the first in result
+			projectionOperator.addField xaxis["column"]
 			projectionOperator.addField column["column"]
 
-			#check for min and max values
-			if not column['min'].nil?
-				simpletablescanOperator = SimpleTableScanOperator.new
+			queryOperator = composeFilterOperator filters
+			queryOperator = composeLocalFilterOparator column, queryOperator
+			queryOperator = composeProjectionOperator xaxis, column, queryOperator
+			queryOperator = composeAggregationOperator xaxis, column, queryOperator
 
-				simpletablescanOperator.addInput tablename
-
-				simpletablescanOperator.addPredicate(SCAN_TYPE::OR)
-				if not column['max'].nil?
-					simpletablescanOperator.addPredicate(SCAN_TYPE::AND)
-					simpletablescanOperator.addPredicate(SCAN_TYPE::LT,0,column['column'], column['type'].to_i,column['max'].to_i)
-				end
-
-				simpletablescanOperator.addPredicate(SCAN_TYPE::GT,0,column['column'], column['type'].to_i,column['min'].to_i)
-
-				simpletablescanOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['min'].to_i)
-
-				simpletablescanOperator.addEdgeTo projectionOperator
-			else
-				projectionOperator.addInput tablename 
-			end
-
-			if column["aggregation"] != 'none'
-				groupOperator = GroupByScanOperator.new
-				hashBuildOperator = HashBuildOperator.new
-
-				hashBuildOperator.addField xaxis["column"]
-
-				groupOperator.addField xaxis["column"]
-
-				case column["aggregation"]
-					when 'count'
-						groupOperator.addFunction(1, xaxis["column"])
-					when 'average'
-						groupOperator.addFunction(2, column["column"])
-					when 'sum'
-						groupOperator.addFunction(0, column["column"])
-					else
-						groupOperator.addFunction(1, xaxis["column"])
-				end
-
-				projectionOperator.addEdgeTo(hashBuildOperator)
-				projectionOperator.addEdgeTo(groupOperator)
-				hashBuildOperator.addEdgeTo(groupOperator)
-
-				sortscan = SortScanOperator.new
-				sortscan.addField 0
-
-				groupOperator.addEdgeTo sortscan
-
-				result = executeQuery sortscan.getQuery
-			else
-				result = executeQuery projectionOperator.getQuery
-			end
+			result = executeQuery queryOperator.getQuery
 
 			unless result['rows'].nil?
 				if xaxis['type'].to_i < 2
@@ -181,5 +137,105 @@ class Hyrise
 
 		    jj json
 		    json
+		end
+
+		def composeFilterOperator(filters)
+
+			returnOperator = nil
+			
+			filters.each do |filter|
+				returnOperator = composeLocalFilterOperator(filter, returnOperator)
+			end
+
+			return returnOperator
+		end
+
+		def composeLocalFilterOperator(column, currentOperator)
+
+			returnOperator = nil
+
+			if !column['min'].nil?				
+				minFilterOperator = SimpleTableScanOperator.new
+				
+				minFilterOperator.addPredicate(SCAN_TYPE::OR)
+
+				minFilterOperator.addPredicate(SCAN_TYPE::GT,0,column['column'], column['type'].to_i,column['min'].to_i)
+				minFilterOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['min'].to_i)
+
+				if currentOperator.nil? 
+					minFilterOperator.addInput tablename
+				else
+					currentOperator addEdgeTo minFilterOperator
+				end
+				returnOperator = minFilterOperator
+			end
+			if !column['max'].nil?
+				maxFilterOperator = SimpleTableScanOperator.new
+				maxFilterOperator.addInput tablename
+				maxFilterOperator.addPredicate(SCAN_TYPE::OR)
+
+				maxFilterOperator.addPredicate(SCAN_TYPE::LT,0,column['column'], column['type'].to_i,column['max'].to_i)
+				maxFilterOperator.addPredicate(SCAN_TYPE::EQ,0,column['column'], column['type'].to_i,column['max'].to_i)
+
+				if returnOperator.nil?
+					maxFilterOperator.addInput tablename
+				else 
+					returnOperator addEdgeTo maxFilterOperator
+				end
+				returnOperator = maxFilterOperator
+			end
+
+			return returnOperator
+		end
+
+		def composeProjectionOperator(xaxis, column, currentOperator)
+
+			projectionOperator = ProjectionScanOperator.new
+
+			projectionOperator.addField xaxis["column"]
+			projectionOperator.addField column["column"]
+
+			if !currentOperator.nil? 
+				currentOperator addEdgeTo projectionOperator
+			else
+				projectionOperator addInput column["table"]
+			end
+
+			return projectionOperator
+		end
+
+		def composeAggregationOperator(xaxis, column, currentOperator)
+			if column["aggregation"] != 'none'
+				groupOperator = GroupByScanOperator.new
+				hashBuildOperator = HashBuildOperator.new
+
+				hashBuildOperator.addField xaxis["column"]
+
+				groupOperator.addField xaxis["column"]
+
+				case column["aggregation"]
+					when 'count'
+						groupOperator.addFunction(1, xaxis["column"])
+					when 'average'
+						groupOperator.addFunction(2, column["column"])
+					when 'sum'
+						groupOperator.addFunction(0, column["column"])
+					else
+						groupOperator.addFunction(1, xaxis["column"])
+				end
+
+				currentOperator.addEdgeTo(hashBuildOperator)
+				currentOperator.addEdgeTo(groupOperator)
+				hashBuildOperator.addEdgeTo(groupOperator)
+
+				sortOperator = SortScanOperator.new
+				sortOperator.addField 0
+
+				groupOperator.addEdgeTo sortOperator
+
+				return sortOperator
+			end 
+
+			return currentOperator
 		end
 end

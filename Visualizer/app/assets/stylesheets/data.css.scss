@@ -50,7 +50,7 @@ body, html {
 	}	
 }
 
-.axisDroppableContainer{
+.axisDroppableContainer, .filterDroppableContainer {
 	height: 100%;
 	min-height: 35px;
 	width: 100%;
@@ -62,6 +62,11 @@ body, html {
 	border-width: 2px;
 
 	margin-bottom: 20px;
+}
+.filterDroppableContainer {
+	.aggregationControls, .typeControls {
+		display: none;
+	}
 }
 
 #attributes, .axisDroppableContainer{
@@ -89,6 +94,12 @@ body, html {
 	min-height: 100px;
 	border-bottom: $borderWidth solid $borderColor;
 }
+.graphTypeButton {
+	margin: 2px 0;
+}
+.graphTitle {
+	width: 100%;
+}
 #graph {
 	float: left;
 	width: 55% !important; 
@@ -113,10 +124,12 @@ body, html {
 	.popoverToggle {
 		display: none;
 	}
+}
+#xSettings, #graphOptions {
 	.control-group {
 		width: 31%;
 		float: left;
-		padding-right: 5px;
+		padding: 1%;
 	}
 }
 

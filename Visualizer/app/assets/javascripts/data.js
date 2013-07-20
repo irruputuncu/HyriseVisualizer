@@ -58,10 +58,60 @@ var removeSeriesWithColumn = function(columnId, axis) {
     }  
 };
 
+var collectSeries = function() {
+    var newSeries = [];
+
+    var collectFunction = function(){
+
+        var data = {
+            aggregation: $(this).attr("data-aggregation"), // to avoid jquery caching
+            column: $(this).data("column"),
+            type: $(this).data("type"),
+            table: $(this).data("table"),
+            id: $(this).data("id"),
+            min: $(this).attr("data-lower-value"),
+            max: $(this).attr("data-higher-value")
+        };
+
+        series = {
+            'yColumn': data,
+            'id': seriesCount,
+            'axis': $(this).parents('.axis').attr('id').substring(0,1)
+        };
+        newSeries.push(series);
+        seriesCount++;
+    };
+
+    $('#ySettings .column').each(collectFunction);
+    $('#oppositeYSettings .column').each(collectFunction);
+
+    return newSeries;
+}
+
+var collectFilters = function() {
+    var filters = []
+
+    $('#filterContainer').each( function() {
+        var data = {
+            column: $(this).data("column"),
+            table: $(this).data("table"),
+            type: $(this).data("type"),
+            id: $(this).data("id"),
+            min: $(this).attr("data-lower-value"),
+            max: $(this).attr("data-higher-value")
+        }
+
+        filters.push(data);
+    });
+
+    return filters;
+}
+
 var reloadData = function() {
 
     if (($('#ySettings .column').length > 0 || $('#oppositeYSettings .column').length > 0) && $('#xSettings .column').length > 0) {
-        var newSeries = [];
+        
+        var newSeries = collectSeries();
         var xAxisColumn = $('#xSettings .btn.disabled');
         var seriesCount = 0;
         var xAxis = {
@@ -70,35 +120,12 @@ var reloadData = function() {
             "type": xAxisColumn.data("type"),
             "table": xAxisColumn.data("table")
         };
-
-        var collectFunction = function(){
-
-            var data = {
-                aggregation: $(this).attr("data-aggregation"), // to avoid jquery caching
-                column: $(this).data("column"),
-                type: $(this).data("type"),
-                table: $(this).data("table"),
-                id: $(this).data("id"),
-                min: $(this).attr("data-lower-value"),
-                max: $(this).attr("data-higher-value")
-            };
-
-            series = {
-                'yColumn': data,
-                'id': seriesCount,
-                'axis': $(this).parents('.axis').attr('id').substring(0,1)
-            };
-            newSeries.push(series);
-            seriesCount++;
-        };
-
-        $('#ySettings .column').each(collectFunction);
-        $('#oppositeYSettings .column').each(collectFunction);
+        var filters = collectFilters();
 
         $.ajax({
             url: 'getContentForSeries',
             type: "POST",
-            data: {series: newSeries, xaxis: xAxis},
+            data: {series: newSeries, xaxis: xAxis, filters: filters},
             dataType: "script",
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(textStatus);
