@@ -109,9 +109,6 @@ class Hyrise
 	protected
 
 		def executeQuery(query, url = HYRISE_DEFAULT_URL)
-
-			puts query
-
 			req = Net::HTTP::Post.new(url.path)
 			req.set_form_data({:query=> query, :limit => 0})
 
